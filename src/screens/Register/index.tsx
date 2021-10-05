@@ -47,6 +47,7 @@ const schema = Yup.object({
     .number()
     .typeError('Informe um valor númerico')
     .positive('O valor não pode ser negativo')
+    .required('Valor é obrigatório'),
 }).required();
 
 export function Register(){    
@@ -122,7 +123,6 @@ export function Register(){
 
 
         } catch (error) {
-            console.log(error);
             Alert.alert('Não foi possível salvar');
         }
     }
