@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { Routes } from './src/routes';
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components';
 
@@ -29,29 +29,22 @@ export default function App() {
     Poppins_700Bold
   });
 
-  // utilizado pra segurar o app na splash enquanto carrega as fontes
-  if(!fontsLoaded){
+  const { userStorageLoading } = useAuth();
+
+  if(!fontsLoaded || userStorageLoading){
     return <AppLoading />
   };
 
   return (
     <ThemeProvider theme={theme}>
-
-      <NavigationContainer>
-
         <StatusBar 
           barStyle='light-content'
           backgroundColor="transparent"
           translucent
         />
-
         <AuthProvider>
-
-          <SignIn />
-
+          <Routes />
         </AuthProvider>
-
-      </NavigationContainer>
 
     </ThemeProvider>
   );
