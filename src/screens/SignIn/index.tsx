@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Platform } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
+import { MaterialIcons } from '@expo/vector-icons';
 
-import AppleSvg from '../../assets/apple.svg';
 import GoogleSvg from '../../assets/google.svg';
-import LogoSvg from '../../assets/logo.svg';
 
 import { useAuth } from '../../hooks/auth';
+import { appFirebase } from '../../config/firebase';
 
 import { SignInSocialButton } from '../../components/SignInSocialButton';
+import { Input } from '../../components/Form/Input';
+import { Button} from '../../components/Form/Button';
 
 import {
     Container,
@@ -18,50 +20,46 @@ import {
     Title,
     SignInTitle,
     Footer,
-    FooterWrapper
+    FooterWrapper,
+    ButtonLogin
 } from './styles';
 
 export function SignIn(){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorLogin, setErrorLogin] = useState(false);
+
     const [isLoading, setIsLoading] = useState(false);
     const { signInWithGoogle, signInWithApple } = useAuth();
-    const theme = useTheme();
 
-    async function handleSignInWithGoogle(){
-        try {
-            setIsLoading(true);
-            return await signInWithGoogle();
-        } catch (error) {
-            console.log(error);
-            Alert.alert('Não foi possível conectar a conta Google');
-            setIsLoading(false);         
-        }
-    }
+    const theme = useTheme();    
 
-    async function handleSignInWithApple(){
-        try {
-            setIsLoading(true);
-            return await signInWithApple();
-
-        } catch (error) {
-            console.log(error);
-            Alert.alert('Não foi possível conectar a conta Apple');
-            setIsLoading(false);
-        }
+    function TODOLOGIN(){
+        appFirebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            var user = userCredential.user;
+            setErrorLogin(false);
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;  
+            
+            setErrorLogin(true);
+        });
     }
 
     return(
         <Container>
             <Header>
                 <TitleWrapper>
-                    <LogoSvg 
-                        width={RFValue(120)}
-                        height={RFValue(68)}
+                    <MaterialIcons 
+                        name="menu-book"
+                        size={RFValue(80)}
+                        color="#FFF"
                     />
 
                     <Title>
-                        Controle suas {'\n'}
-                        finanças de forma {'\n'}
-                        muito simples
+                        Easy Menu {'\n'}
                     </Title>
 
                 </TitleWrapper>
@@ -77,24 +75,42 @@ export function SignIn(){
                     <SignInSocialButton 
                         title="Entrar com Google"
                         svg={GoogleSvg}
-                        onPress={handleSignInWithGoogle}
                     />
 
-                    { Platform.OS === 'ios' &&
-                        <SignInSocialButton 
-                        title="Entrar com Apple"
-                        svg={AppleSvg}
-                        onPress={handleSignInWithApple}
+                    <Input
+                        name="email"
+                        placeholder="E-mail"
+                        autoCapitalize="none"
+                        value={email}
+                        onChangeText={(email : any) => setEmail(email)}
                     />
-                    }
+                    
+                    <Input 
+                        name="password"
+                        placeholder="Senha"
+                        secureTextEntry={true}
+                        value={password}
+                        onChangeText={(password : any) => setPassword(password)}
+                    />    
+                    { errorLogin === true ?
+                        <Text>O e-mail ou a senha estão incorretos.</Text>
+                    :
+                    isLoading && 
+                        <ActivityIndicator 
+                            color={theme.colors.shape}
+                            style={{marginTop: 18}}                    
+                        />                    
+                    }               
+
                 </FooterWrapper>
 
-                { isLoading && 
-                    <ActivityIndicator 
-                        color={theme.colors.shape}
-                        style={{marginTop: 18}}                    
-                    />
-                }
+                <ButtonLogin> 
+                    <Button 
+                        title="Entrar"
+                        onPress={TODOLOGIN} 
+                    />  
+                </ButtonLogin>
+                
             </Footer>
 
         </Container>

@@ -16,10 +16,6 @@ import {
 
 import theme from './src/global/styles/theme';
 
-import { AppRoutes } from './src/routes/app.routes';
-
-import { SignIn } from './src/screens/SignIn';
-
 import { AuthProvider, useAuth } from './src/hooks/auth';
 
 export default function App() {

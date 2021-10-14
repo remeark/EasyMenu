@@ -7,9 +7,9 @@ export const Container = styled.View`
 
 export const Header = styled.View`
     width: 100%;
-    height: 70%;
+    height: 60%;
 
-    background-color: ${({theme}) => theme.colors.primary};
+    background-color: ${({theme}) => theme.colors.secondary};
 
     justify-content: flex-end;
     align-items: center;
@@ -26,7 +26,7 @@ export const Title = styled.Text`
 
     text-align: center;
 
-    margin-top: 45px;
+    margin-top: 10px;
 `;
 
 export const SignInTitle = styled.Text`
@@ -36,15 +36,15 @@ export const SignInTitle = styled.Text`
 
     text-align: center;
 
-    margin-top: 80px;
+    margin-top: 50px;
     margin-bottom: 67px;
 `;
 
 export const Footer = styled.View`
-    background-color: ${({theme}) => theme.colors.secondary};
+    background-color: ${({theme}) => theme.colors.primary};
     
     width: 100%;
-    height: 30%;
+    height: 40%;
 `;
 
 export const FooterWrapper = styled.View`
@@ -53,4 +53,10 @@ export const FooterWrapper = styled.View`
     padding: 0 32px;
 
     justify-content: space-between;
+`;
+
+export const ButtonLogin = styled.View`
+    padding: 0 32px;
+
+    margin-top: ${RFPercentage(5)}px;
 `;
