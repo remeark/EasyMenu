@@ -64,7 +64,7 @@ export function Resume(){
 
     async function loadData(){        
         setIsLoading(true);
-        const dataKey = `@gofinances:transactions_user:${user.id}`;
+        const dataKey = `@easymenu:transactions_user:${user.id}`;
         const response = await AsyncStorage.getItem(dataKey);
         const responseFormatted = response ? JSON.parse(response) : [];
 

@@ -87,7 +87,7 @@ export function Register(){
     }
 
     async function handleRegister(form : FormData){
-        const dataKey = `@gofinances:transactions_user:${user.id}`;
+        const dataKey = `@easymenu:transactions_user:${user.id}`;
 
         if(!transactionType)
             return Alert.alert('Selecione o tipo da transação');

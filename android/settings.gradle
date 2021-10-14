@@ -1,4 +1,4 @@
-rootProject.name = 'gofinances'
+rootProject.name = 'easymenu'
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()

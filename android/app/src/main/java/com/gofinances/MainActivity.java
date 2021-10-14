@@ -1,4 +1,4 @@
-package com.gofinances;
+package com.easymenu;
 
 import android.os.Bundle;
 

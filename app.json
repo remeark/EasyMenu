@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "gofinances",
-    "slug": "gofinances",
-    "scheme": "gofinances",
+    "name": "easymenu",
+    "slug": "easymenu",
+    "scheme": "easymenu",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ]
   },
-  "name": "gofinances"
+  "name": "easymenu"
 }
