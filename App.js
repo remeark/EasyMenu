@@ -1,6 +1,5 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
-import { Routes } from './src/routes';
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components';
 
@@ -15,6 +14,9 @@ import {
 } from '@expo-google-fonts/poppins';
 
 import theme from './src/global/styles/theme';
+import { Routes } from './src/routes';
+
+import { SelectWay } from './src/screens/SelectWay';
 
 import { AuthProvider, useAuth } from './src/hooks/auth';
 
@@ -38,10 +40,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        <AuthProvider>
           <Routes />
-        </AuthProvider>
-
     </ThemeProvider>
   );
 }

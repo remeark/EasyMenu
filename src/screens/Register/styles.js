@@ -7,7 +7,7 @@ export const Container = styled.View`
 `;
 
 export const Header = styled.View`
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.secondary};
 
     width: 100%;
     height: ${RFValue(113)}px;
@@ -34,10 +34,11 @@ export const Form = styled.View`
 
 export const Fields = styled.View``;
 
-export const TransactionsTypes = styled.View`
-    flex-direction: row;
-    justify-content: space-between;
+export const ErrorRegister = styled.View`
+    flex: 1;
+`;
 
-    margin-top: 8px;
-    margin-bottom: 16px;
+export const ErrorRegisterText = styled.Text`
+    font-family:${({theme}) => theme.fonts.regular};
+    color: ${({theme}) => theme.colors.attention};
 `;

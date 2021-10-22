@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-import GoogleSvg from '../../assets/google.svg';
-
-import { useAuth } from '../../hooks/auth';
 import { appFirebase } from '../../config/firebase';
 
-import { SignInSocialButton } from '../../components/SignInSocialButton';
 import { Input } from '../../components/Form/Input';
 import { Button} from '../../components/Form/Button';
 
@@ -21,7 +18,10 @@ import {
     SignInTitle,
     Footer,
     FooterWrapper,
-    ButtonLogin
+    ButtonLogin,
+    ErrorLoginText,
+    ErrorLogin,
+    RegisterText
 } from './styles';
 
 export function SignIn(){
@@ -30,15 +30,22 @@ export function SignIn(){
     const [errorLogin, setErrorLogin] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
-    const { signInWithGoogle, signInWithApple } = useAuth();
 
-    const theme = useTheme();    
+    const navigation = useNavigation();
 
-    function TODOLOGIN(){
+    const route = useRoute();
+    const isCompany = route.params.isCompany;
+
+    const theme = useTheme();     
+
+    function Login(){
         appFirebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             var user = userCredential.user;
+            setIsLoading(true);
             setErrorLogin(false);
+
+            navigation.navigate('ClientDashboard');
         })
         .catch((error) => {
             var errorCode = error.code;
@@ -72,17 +79,12 @@ export function SignIn(){
 
             <Footer>
                 <FooterWrapper>
-                    <SignInSocialButton 
-                        title="Entrar com Google"
-                        svg={GoogleSvg}
-                    />
-
                     <Input
                         name="email"
                         placeholder="E-mail"
                         autoCapitalize="none"
                         value={email}
-                        onChangeText={(email : any) => setEmail(email)}
+                        onChangeText={(email) => setEmail(email)}
                     />
                     
                     <Input 
@@ -90,10 +92,12 @@ export function SignIn(){
                         placeholder="Senha"
                         secureTextEntry={true}
                         value={password}
-                        onChangeText={(password : any) => setPassword(password)}
+                        onChangeText={(password) => setPassword(password)}
                     />    
                     { errorLogin === true ?
-                        <Text>O e-mail ou a senha estão incorretos.</Text>
+                        <ErrorLogin>
+                            <ErrorLoginText>O e-mail ou a senha estão incorretos.</ErrorLoginText>
+                        </ErrorLogin>
                     :
                     isLoading && 
                         <ActivityIndicator 
@@ -107,9 +111,14 @@ export function SignIn(){
                 <ButtonLogin> 
                     <Button 
                         title="Entrar"
-                        onPress={TODOLOGIN} 
+                        onPress={Login} 
                     />  
                 </ButtonLogin>
+
+                <RegisterText 
+                    onPress={() => route.params.isCompany ? navigation.navigate('Register') : navigation.navigate('UserRegister')}> 
+                    Registre-se já 
+                </RegisterText>
                 
             </Footer>
 
