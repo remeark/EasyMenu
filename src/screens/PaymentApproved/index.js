@@ -18,11 +18,11 @@ export function PaymentApproved(){
 
     const theme = useTheme();
 
-    //const navigation = useNavigation();
+    const navigation = useNavigation();
     //const route = useRoute();    
     
-    function QRCode(){
-        console.log('qrcode');
+    function returnToBegin(){
+        navigation.navigate('ClientDashboard');
     }
 
     // useFocusEffect(useCallback(() => {
@@ -50,7 +50,7 @@ export function PaymentApproved(){
                     <Title>Pagamento aprovado!</Title>
                     <Button 
                             title="Retornar ao início" 
-                            onPress={QRCode}
+                            onPress={returnToBegin}
                     />
                 </Body>
 

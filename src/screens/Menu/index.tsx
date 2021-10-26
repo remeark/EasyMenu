@@ -27,13 +27,13 @@ import {
 import { Background } from 'victory-core';
 
 
-export function RestaurantMenu(){
+export function Menu(){
     const [selectItem, setSelectItem] = useState([]);
     const [valuePedido, setValuePedido] = useState(0);
 
     const theme = useTheme();
 
-    //const navigation = useNavigation();
+    const navigation = useNavigation();
     //const route = useRoute();
     
     function removeValue({ value, id }){
@@ -57,7 +57,7 @@ export function RestaurantMenu(){
     }
     
     function QRCode(){
-        console.log('qrcode');
+        navigation.navigate('Payment');
     }
 
     const cardapio = [
@@ -96,47 +96,47 @@ export function RestaurantMenu(){
                 <HeaderRestaurant 
                     name="Restaurante"
                     table="Mesa 40"
-                />                
+                />
 
                 <Body>
-                    <Title>Cardápio </Title>
+
+                <Title>Cardápio </Title>
                     
-                        <MenuList 
-                            data={cardapio}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item }) =>
-                            <MenuCard style={
-                                selectItem.some(index => index === item.id)
-                                ? {
-                                    backgroundColor: theme.colors.success_light,
-                                  }
-                                : {
-                                    backgroundColor: theme.colors.shape
-                                  }}> 
-                                <TitleMenuCard>
-                                    {item.text} - {item.value.toLocaleString('pt-BR', { style: 'currency',currency: 'BRL'})}
-                                </TitleMenuCard>
-
-                                <Observations>
-                                    {item.observations}
-                                </Observations>
-
-                                <FooterMenuCard>
-                                    <TouchableOpacity onPress={() => removeValue(item)}>
-                                        <IconUnselection name="x"/>
-                                    </TouchableOpacity>
-                                    <Quantity> 
-                                        {selectItem.filter(x => x === item.id).length}
-                                    </Quantity>
-                                    <TouchableOpacity onPress={() => addValue(item)}> 
-                                        <IconSelection name="check"/>      
-                                    </TouchableOpacity>          
-                                </FooterMenuCard>
-                            </MenuCard>
+                <MenuList 
+                    data={cardapio}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) =>
+                    <MenuCard style={
+                        selectItem.some(index => index === item.id)
+                        ? {
+                            backgroundColor: theme.colors.success_light,
                             }
-                        />
-                    
-                    
+                        : {
+                            backgroundColor: theme.colors.shape
+                            }}> 
+                        <TitleMenuCard>
+                            {item.text} - {item.value.toLocaleString('pt-BR', { style: 'currency',currency: 'BRL'})}
+                        </TitleMenuCard>
+
+                        <Observations>
+                            {item.observations}
+                        </Observations>
+
+                        <FooterMenuCard>
+                            <TouchableOpacity onPress={() => removeValue(item)}>
+                                <IconUnselection name="x"/>
+                            </TouchableOpacity>
+                            <Quantity> 
+                                {selectItem.filter(x => x === item.id).length}
+                            </Quantity>
+                            <TouchableOpacity onPress={() => addValue(item)}> 
+                                <IconSelection name="check"/>      
+                            </TouchableOpacity>          
+                        </FooterMenuCard>
+                    </MenuCard>
+                    }
+                />               
+
                 </Body>
 
                 <Footer>

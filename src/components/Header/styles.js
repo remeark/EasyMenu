@@ -9,14 +9,14 @@ export const Container = styled.View`
 `;
 
 export const HeaderContainer = styled.View`
+    background-color: ${({ theme }) => theme.colors.secondary};
+
     width: 100%;
-    height: ${RFPercentage(15)}px;
+    height: ${RFValue(113)}px;
 
-    background-color: ${({theme}) => theme.colors.secondary};
-
-    justify-content: center;
     align-items: center;
-    padding-top: 45px;
+    justify-content: flex-end;
+    padding-bottom: 19px;
 `;
 
 export const UserWrapper = styled.View`

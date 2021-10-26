@@ -16,10 +16,8 @@ import {
 import theme from './src/global/styles/theme';
 import { Routes } from './src/routes';
 
-import { SelectWay } from './src/screens/SelectWay';
-
 import { AuthProvider, useAuth } from './src/hooks/auth';
-import { Payment } from './src/screens/Payment';
+import { Editor } from './src/screens/Editor';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -41,8 +39,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-          {/* <Routes /> */}
-          <Payment />
+          <Routes />
     </ThemeProvider>
   );
 }

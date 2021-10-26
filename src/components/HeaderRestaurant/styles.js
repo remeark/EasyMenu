@@ -8,7 +8,6 @@ export const Container = styled.View`
 
     justify-content: center;
     align-items: center;  
-    margin-top: ${RFPercentage(-50)}px;  
     
     background-color: ${({ theme }) => theme.colors.success };
     

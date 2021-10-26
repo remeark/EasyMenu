@@ -34,24 +34,22 @@ export function Header({
 
 
     return(
-        <Container> 
-                <HeaderContainer>
-                    <UserWrapper>
-                        <UserInfo>
-                            
-                            <User>
-                                <UserGreeting>Olá, </UserGreeting>
-                                <UserName>{name}</UserName>
-                            </User>
+        <HeaderContainer>
+            <UserWrapper>
+                <UserInfo>
+                    
+                    <User>
+                        <UserGreeting>Olá, </UserGreeting>
+                        <UserName>{name}</UserName>
+                    </User>
 
-                        </UserInfo>
+                </UserInfo>
 
-                        <LogoutButton onPress={signOut}>
-                            <Icon name="power"/>
-                        </LogoutButton>
+                <LogoutButton onPress={signOut}>
+                    <Icon name="power"/>
+                </LogoutButton>
 
-                    </UserWrapper>   
-                </HeaderContainer>
-        </Container>
+            </UserWrapper>   
+        </HeaderContainer>
     )
 }

@@ -16,11 +16,11 @@ export function ClientDashboard(){
 
     const theme = useTheme();
 
-    //const navigation = useNavigation();
+    const navigation = useNavigation();
     //const route = useRoute();    
     
     function QRCode(){
-        console.log('qrcode');
+        navigation.navigate('Menu');
     }
 
     // useFocusEffect(useCallback(() => {

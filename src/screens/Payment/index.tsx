@@ -31,11 +31,11 @@ export function Payment(){
 
     const theme = useTheme();
 
-    //const navigation = useNavigation();
+    const navigation = useNavigation();
     //const route = useRoute();
     
     function QRCode(){
-        console.log('qrcode');
+        navigation.navigate('PaymentApproved');
     }
 
     return(
@@ -84,25 +84,22 @@ export function Payment(){
                         <RadioButton.Item label="Débito" value="debito"/>
                         <RadioButton.Item label="Crédito" value="credito"/>
                     </RadioButton.Group>
-                </Form> 
-            </Body>
 
-            <Footer>
+                    <Footer>
 
-                <Value>Valor do Pedido: {valuePedido.toLocaleString('pt-BR', {
-                                                    style: 'currency',
-                                                    currency: 'BRL'
-                                                })}
-                    </Value>
+                        <Value>Valor do Pedido: {valuePedido.toLocaleString('pt-BR', {
+                                                        style: 'currency',
+                                                        currency: 'BRL'
+                                                    })}
+                        </Value>
 
-                    <Button 
-                            title="Efetuar Pagamento" 
-                            onPress={QRCode}
-                    />
-            </Footer>
-
-            
-
+                        <Button 
+                                title="Efetuar Pagamento" 
+                                onPress={QRCode}
+                        />
+                    </Footer>
+                </Form>                 
+            </Body>    
         </Container>
     )
 };

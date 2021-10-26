@@ -15,4 +15,6 @@ export const Body = styled.View`
     width: 100%;
 
     padding: 0 32px;
+
+    justify-content: center;
 `;
