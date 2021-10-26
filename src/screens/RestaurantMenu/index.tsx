@@ -8,7 +8,6 @@ import { appFirebase } from '../../config/firebase';
 import { Button } from '../../components/Form/Button';
 import { Header } from '../../components/Header';
 import { HeaderRestaurant } from '../../components/HeaderRestaurant';
-import { MenuCard } from '../../components/MenuCard';
 
 import { 
     Container, 
@@ -16,60 +15,75 @@ import {
     Footer,
     Value,
     Title,
-    MenuList
+    MenuList,
+    MenuCard,
+    Observations,
+    IconUnselection,
+    IconSelection,
+    FooterMenuCard,
+    TitleMenuCard,
+    Quantity
 } from './styles';
+import { Background } from 'victory-core';
 
 
 export function RestaurantMenu(){
-    const [selectItem, setSelectItem] = useState('');
+    const [selectItem, setSelectItem] = useState([]);
+    const [valuePedido, setValuePedido] = useState(0);
 
     const theme = useTheme();
 
-    function verifyItem(){      
-        console.log("opa " + selectItem);
+    //const navigation = useNavigation();
+    //const route = useRoute();
+    
+    function removeValue({ value, id }){
+        let quantity = selectItem.filter(quantity => quantity === id).length;
+
+        if((valuePedido - Number(value)) * quantity < 0){
+            setValuePedido(0);
+        } else {
+            setValuePedido(valuePedido - Number(value) * quantity);   
+        } 
+
+        setSelectItem(oldState => oldState.filter(
+            index => index !== id
+        ));
     }
 
-    //const navigation = useNavigation();
-    //const route = useRoute();    
+    function addValue({ value, id }){
+        setValuePedido(valuePedido + Number(value));
+        
+        setSelectItem(selectedItem => [...selectedItem, id]);  
+    }
     
     function QRCode(){
         console.log('qrcode');
     }
-
-    // useFocusEffect(useCallback(() => {
-    //     const user = appFirebase.auth().currentUser;
-
-    //     if (user) {
-    //         console.log("logado");
-    //     } else {
-    //         console.log("na ologado");
-    //     }
-    // }, []));
 
     const cardapio = [
         {
           id: "1",
           text: "Xis Salada",
           observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: "25"
+          value: 25
         },
         {
           id: "2",
           text: "Xis Frango",
           observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: "25"
+          value: 25
         },
         {
           id: "3",
           text: "Xis Coração",
           observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: "25"
+          value: 25
         },
         {
             id: "4",
             text: "Xis Coração",
             observations: "Pão, bife, ovo, queijo, tomate e alface",
-            value: "25"
+            value: 25
         },
       ];
 
@@ -85,18 +99,40 @@ export function RestaurantMenu(){
                 />                
 
                 <Body>
-                    <Title>Cardápio</Title>
-
+                    <Title>Cardápio </Title>
                     
                         <MenuList 
                             data={cardapio}
                             keyExtractor={item => item.id}
-                            renderItem={({ item }) => 
-                            <TouchableOpacity onPress={verifyItem}>
-                                <MenuCard 
-                                    data={item}
-                                />
-                            </TouchableOpacity>
+                            renderItem={({ item }) =>
+                            <MenuCard style={
+                                selectItem.some(index => index === item.id)
+                                ? {
+                                    backgroundColor: theme.colors.success_light,
+                                  }
+                                : {
+                                    backgroundColor: theme.colors.shape
+                                  }}> 
+                                <TitleMenuCard>
+                                    {item.text} - {item.value.toLocaleString('pt-BR', { style: 'currency',currency: 'BRL'})}
+                                </TitleMenuCard>
+
+                                <Observations>
+                                    {item.observations}
+                                </Observations>
+
+                                <FooterMenuCard>
+                                    <TouchableOpacity onPress={() => removeValue(item)}>
+                                        <IconUnselection name="x"/>
+                                    </TouchableOpacity>
+                                    <Quantity> 
+                                        {selectItem.filter(x => x === item.id).length}
+                                    </Quantity>
+                                    <TouchableOpacity onPress={() => addValue(item)}> 
+                                        <IconSelection name="check"/>      
+                                    </TouchableOpacity>          
+                                </FooterMenuCard>
+                            </MenuCard>
                             }
                         />
                     
@@ -104,7 +140,11 @@ export function RestaurantMenu(){
                 </Body>
 
                 <Footer>
-                    <Value>Valor do Pedido: R$ 25,00</Value>
+                    <Value>Valor do Pedido: {valuePedido.toLocaleString('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL'
+                                                })}
+                    </Value>
 
                     <Button 
                             title="Efetuar Pedido" 

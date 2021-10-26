@@ -54,3 +54,53 @@ export const Value = styled.Text`
     color: ${({ theme }) => theme.colors.text_dark };
     font-size: ${RFValue(15)}px;
 `;
+
+export const MenuCard = styled.View`
+    background-color: ${({ theme }) => theme.colors.shape };
+    border-radius: 5px;
+
+    padding: 17px 24px;
+
+    margin-bottom: 16px;
+`;
+
+export const Observations = styled.Text`
+    font-family: ${({theme}) => theme.fonts.regular};
+    font-size: ${RFValue(13)}px;
+    
+    margin-top: 2px;
+`;
+
+
+export const FooterMenuCard = styled.View`
+    flex-direction: row;
+    justify-content: flex-end;
+
+    margin-top: 19px;
+`;
+
+export const IconSelection = styled(Feather)`
+    color: ${({theme}) => theme.colors.success};
+    font-size: ${RFValue(25)}px; 
+    
+    margin-left: 5px;
+`;
+
+export const IconUnselection = styled(Feather)`
+    color: ${({theme}) => theme.colors.attention};
+    font-size: ${RFValue(25)}px;
+    margin-right: 5px;
+`;
+
+export const TitleMenuCard = styled.Text`
+    font-family: ${({theme}) => theme.fonts.medium};
+    font-size: ${RFValue(14)}px;    
+`;
+
+export const Quantity = styled.Text`
+    font-family: ${({theme}) => theme.fonts.medium};
+    font-size: ${RFValue(18)}px;  
+`;
+
+
+

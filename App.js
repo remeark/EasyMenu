@@ -19,7 +19,7 @@ import { Routes } from './src/routes';
 import { SelectWay } from './src/screens/SelectWay';
 
 import { AuthProvider, useAuth } from './src/hooks/auth';
-import { RestaurantMenu } from './src/screens/RestaurantMenu';
+import { Payment } from './src/screens/Payment';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -42,7 +42,7 @@ export default function App() {
           translucent
         />
           {/* <Routes /> */}
-          <RestaurantMenu />
+          <Payment />
     </ThemeProvider>
   );
 }

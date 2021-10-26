@@ -15,8 +15,7 @@ export const HeaderContainer = styled.View`
     background-color: ${({theme}) => theme.colors.secondary};
 
     justify-content: center;
-    align-items: flex-start;
-    flex-direction: row;
+    align-items: center;
     padding-top: 45px;
 `;
 
