@@ -24,7 +24,6 @@ import {
     TitleMenuCard,
     Quantity
 } from './styles';
-import { Background } from 'victory-core';
 
 
 export function Menu(){
@@ -57,7 +56,7 @@ export function Menu(){
     }
     
     function QRCode(){
-        navigation.navigate('Payment');
+        navigation.navigate('ItensRequest');
     }
 
     const cardapio = [

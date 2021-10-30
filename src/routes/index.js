@@ -13,7 +13,7 @@ export function Routes(){
 
     return (
         <NavigationContainer>
-            <RestaurantRoutes />
+            <UserRoutes />
         </NavigationContainer>
     )
 };

@@ -9,19 +9,19 @@ export const Container = styled.View`
     justify-content: center;
     align-items: center;  
     
-    background-color: ${({ theme }) => theme.colors.success };
+    background-color: ${({ theme }) => theme.colors.secondary_light };
     
 `;
 
 export const RestaurantTitle = styled.Text`
     font-family: ${({ theme }) => theme.fonts.bold };
-    color: ${({ theme }) => theme.colors.shape };
+    color: ${({ theme }) => theme.colors.text_dark };
 
     font-size: ${RFValue(20)}px;
 `;
 
 export const RestaurantTable = styled.Text`
     font-family: ${({ theme }) => theme.fonts.medium };
-    color: ${({ theme }) => theme.colors.shape };
+    color: ${({ theme }) => theme.colors.text_dark };
     font-size: ${RFValue(15)}px;
 `;

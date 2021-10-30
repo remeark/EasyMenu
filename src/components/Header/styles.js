@@ -12,11 +12,10 @@ export const HeaderContainer = styled.View`
     background-color: ${({ theme }) => theme.colors.secondary};
 
     width: 100%;
-    height: ${RFValue(113)}px;
+    height: ${RFValue(80)}px;
 
     align-items: center;
     justify-content: flex-end;
-    padding-bottom: 19px;
 `;
 
 export const UserWrapper = styled.View`
