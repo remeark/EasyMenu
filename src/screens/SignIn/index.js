@@ -28,13 +28,10 @@ export function SignIn(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorLogin, setErrorLogin] = useState(false);
-
     const [isLoading, setIsLoading] = useState(false);
 
     const navigation = useNavigation();
-
     const route = useRoute();
-    const isCompany = route.params.isCompany;
 
     const theme = useTheme();     
 

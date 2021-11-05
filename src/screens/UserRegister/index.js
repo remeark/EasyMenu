@@ -54,6 +54,14 @@ export function UserRegister(){
                 <Form>
                     <Fields>
                         <Input
+                            name="name"
+                            placeholder="Nome"
+                            autoCapitalize="none"
+                            value={email}
+                            onChangeText={(email) => setEmail(email)}
+                        />
+
+                        <Input
                             name="email"
                             placeholder="E-mail"
                             autoCapitalize="none"

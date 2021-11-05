@@ -72,6 +72,28 @@ export function Register(){
                         />
 
                         <Input 
+                            name="endereco"
+                            placeholder="Endereço"
+                            value={CNPJ}
+                            onChangeText={(cnpj) => setCNPJ(cnpj)}
+                        />
+
+                        <Input 
+                            name="fixo"
+                            placeholder="Telefone Fixo"
+                            value={email}
+                            onChangeText={(email) => setEmail(email)}
+                        />
+
+                        <Input 
+                            name="celular"
+                            placeholder="Celular"
+                            value={email}
+                            onChangeText={(email) => setEmail(email)}
+                        />
+
+                        
+                        <Input 
                             name="email"
                             placeholder="E-mail"
                             value={email}

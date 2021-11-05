@@ -37,7 +37,7 @@ export function ItensRequest(){
     //const route = useRoute();
     
     function QRCode(){
-        navigation.navigate('Payment');
+        navigation.navigate('ChoosePayment');
     }
 
     const cardapio = [

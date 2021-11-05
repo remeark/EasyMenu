@@ -6,6 +6,7 @@ import { Menu } from '../screens/Menu';
 import { Payment } from '../screens/Payment';
 import { PaymentApproved } from '../screens/PaymentApproved';
 import { ItensRequest } from '../screens/ItensRequest';
+import { ChoosePayment } from '../screens/ChoosePayment';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -25,6 +26,10 @@ export function UserRoutes(){
             <Screen 
                 name="ItensRequest"
                 component={ItensRequest}
+            />
+            <Screen 
+                name="ChoosePayment"
+                component={ChoosePayment}
             />
             <Screen 
                 name="Payment"
