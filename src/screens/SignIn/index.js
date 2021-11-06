@@ -5,7 +5,7 @@ import { useTheme } from 'styled-components';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { appFirebase } from '../../config/firebase';
+import { appFirebase, database } from '../../config/firebase';
 
 import { Input } from '../../components/Form/Input';
 import { Button} from '../../components/Form/Button';
@@ -30,6 +30,8 @@ export function SignIn(){
     const [errorLogin, setErrorLogin] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const [userType, setUserType] = useState('');
+
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -42,7 +44,24 @@ export function SignIn(){
             setIsLoading(true);
             setErrorLogin(false);
 
-            navigation.navigate('ClientDashboard');
+            try {
+                if(route.params.isCompany) {
+                    database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+                        if(doc.data().cnpj){
+                            navigation.navigate('RestaurantDashboard', { isCompany: route.params.isCompany })
+                        }                        
+                    });
+                } else {
+                    database.collection('users').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+                        if(doc.data().name){
+                            console.log('enrtou');
+                            navigation.navigate('ClientDashboard', { isCompany: route.params.isCompany })
+                        }
+                    });
+                }                
+            } catch (error) {
+                console.log(error);
+            }
         })
         .catch((error) => {
             var errorCode = error.code;
@@ -50,7 +69,31 @@ export function SignIn(){
             
             setErrorLogin(true);
         });
-    }
+    };
+
+    useEffect(() => {
+        appFirebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                try {
+                    if ( route.params.isCompany ) {
+                        database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+                            if(doc.data().cnpj){
+                                navigation.navigate('RestaurantDashboard', { isCompany: route.params.isCompany })
+                            }                        
+                        });
+                    } else {
+                        database.collection('users').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+                            if(doc.data().name){
+                                navigation.navigate('ClientDashboard', { isCompany: route.params.isCompany })
+                            }
+                        });
+                    }                
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        });
+    }, []);
 
     return(
         <Container>

@@ -12,7 +12,7 @@ const firebaseConfig = {
   measurementId: "G-N78QGR2DY5"
 };
 
-export const googleProvider = new firebase.auth.GoogleAuthProvider();
-
 // Initialize Firebase
 export const appFirebase = firebase.initializeApp(firebaseConfig);
+
+export const database = firebase.firestore();

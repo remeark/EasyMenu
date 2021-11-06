@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
@@ -6,6 +6,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import { Button} from '../../components/Form/Button';
+
+import { appFirebase } from '../../config/firebase';
 
 import {
     Container,

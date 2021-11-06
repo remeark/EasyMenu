@@ -1,7 +1,7 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { appFirebase } from '../../config/firebase';
+import { appFirebase, database } from '../../config/firebase';
 
 import {
     Container,
@@ -15,15 +15,25 @@ import {
     Icon
 } from './styles';
 
-export function Header({
-    name
-}){
+export function Header(){
+    const [userName, setUserName] = useState('');
+    const navigation = useNavigation();
+    const route = useRoute();
 
-    //const navigation = useNavigation();
+    if(route.params.isCompany) {
+        database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+            setUserName(doc.data().name);
+        });
+    }
+    else {
+        database.collection('users').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+            setUserName(doc.data().name);
+        });
+    }       
 
     function signOut(){
         appFirebase.auth().signOut().then(() => {
-            //navigation.navigate('SelectWay');
+            navigation.navigate('SelectWay');
           }).catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -32,7 +42,6 @@ export function Header({
           });
     }
 
-
     return(
         <HeaderContainer>
             <UserWrapper>
@@ -40,7 +49,7 @@ export function Header({
                     
                     <User>
                         <UserGreeting>Olá, </UserGreeting>
-                        <UserName>{name}</UserName>
+                        <UserName>{userName}</UserName>
                     </User>
 
                 </UserInfo>

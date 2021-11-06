@@ -6,6 +6,7 @@ import { UserRegister } from '../screens/UserRegister';
 import { ClientDashboard } from '../screens/ClientDashboard';
 import { SelectWay } from '../screens/SelectWay';
 import { Register } from '../screens/Register';
+import { RestaurantDashboard } from '../screens/RestaurantDashboard';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -33,7 +34,11 @@ export function AuthRoutes(){
             <Screen 
                 name="ClientDashboard"
                 component={ClientDashboard}
-            />            
+            />
+             <Screen 
+                name="RestaurantDashboard"
+                component={RestaurantDashboard}
+            />              
         </Navigator>
     )
 }

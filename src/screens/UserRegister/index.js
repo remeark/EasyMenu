@@ -4,7 +4,7 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
-import { appFirebase } from '../../config/firebase';
+import { appFirebase, database } from '../../config/firebase';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '../../components/Form/Button';
 
@@ -19,9 +19,12 @@ import {
 } from './styles';
 import { Input } from '../../components/Form/Input';
 
-export function UserRegister(){    
+export function UserRegister(){   
+    const [name, setName] = useState(''); 
     const [email, setEmail] = useState('');
+    const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
+
     const [errorRegister, setErrorRegister] = useState(false);
 
     const navigation = useNavigation();
@@ -31,14 +34,23 @@ export function UserRegister(){
         .then((userCredential) => {
           var user = userCredential.user;
 
-          setErrorRegister(false);
+          database.collection("users").doc(user.uid).set({
+            name: name,
+            lastName: lastName,
+            email: email
+          })
+          .catch((error) => {
+            console.error("Error writing document: ", error);
+          });
 
+          setErrorRegister(false);
           navigation.navigate("SignIn", { isCompany: false });
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
           // ..
+          console.log(errorMessage);
           setErrorRegister(true);
         });      
     }
@@ -57,8 +69,16 @@ export function UserRegister(){
                             name="name"
                             placeholder="Nome"
                             autoCapitalize="none"
-                            value={email}
-                            onChangeText={(email) => setEmail(email)}
+                            value={name}
+                            onChangeText={(name) => setName(name)}
+                        />
+
+                        <Input
+                            name="lastName"
+                            placeholder="Sobrenome"
+                            autoCapitalize="none"
+                            value={lastName}
+                            onChangeText={(lastName) => setLastName(lastName)}
                         />
 
                         <Input
