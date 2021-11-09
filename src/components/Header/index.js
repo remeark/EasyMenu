@@ -18,18 +18,18 @@ import {
 export function Header(){
     const [userName, setUserName] = useState('');
     const navigation = useNavigation();
-    const route = useRoute();
+    // const route = useRoute();
 
-    if(route.params.isCompany) {
-        database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
-            setUserName(doc.data().name);
-        });
-    }
-    else {
-        database.collection('users').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
-            setUserName(doc.data().name);
-        });
-    }       
+    // if(route.params.isCompany) {
+    //     database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+    //         setUserName(doc.data().name);
+    //     });
+    // }
+    // else {
+    //     database.collection('users').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+    //         setUserName(doc.data().name);
+    //     });
+    // }       
 
     function signOut(){
         appFirebase.auth().signOut().then(() => {

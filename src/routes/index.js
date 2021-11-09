@@ -11,7 +11,7 @@ export function Routes(){
 
     return (
         <NavigationContainer>
-            <AuthRoutes />
+            <UserRoutes />
         </NavigationContainer>
     )
 };

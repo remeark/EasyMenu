@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from 'styled-components';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { appFirebase } from '../../config/firebase';
+import { appFirebase, database } from '../../config/firebase';
 
 import { Button } from '../../components/Form/Button';
 import { Header } from '../../components/Header';
@@ -29,11 +29,12 @@ import {
 export function Menu(){
     const [selectItem, setSelectItem] = useState([]);
     const [valuePedido, setValuePedido] = useState(0);
-
+    const [restaurantName, setRestaurantName] = useState('');
+    
     const theme = useTheme();
 
     const navigation = useNavigation();
-    //const route = useRoute();
+    const route = useRoute();
     
     function removeValue({ value, id }){
         let quantity = selectItem.filter(quantity => quantity === id).length;
@@ -84,7 +85,20 @@ export function Menu(){
             observations: "Pão, bife, ovo, queijo, tomate e alface",
             value: 25
         },
-      ];
+      ];      
+
+    useEffect(() => {
+        database.collection('company').where("email", "==", route.params.restaurant)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setRestaurantName(doc.data().name);
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+    }, []);
 
     return(
         <Container>                 
@@ -93,8 +107,8 @@ export function Menu(){
                 />
 
                 <HeaderRestaurant 
-                    name="Restaurante"
-                    table="Mesa 40"
+                    name={restaurantName.toUpperCase()}
+                    table={`Mesa ${route.params.table}`}
                 />
 
                 <Body>
