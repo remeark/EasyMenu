@@ -51,3 +51,12 @@ export const ErrorRegisterText = styled.Text`
     font-family:${({theme}) => theme.fonts.regular};
     color: ${({theme}) => theme.colors.attention};
 `;
+
+export const DeleteText = styled.Text`
+    font-family:${({theme}) => theme.fonts.regular};
+    color: ${({theme}) => theme.colors.attention};
+    font-size: ${RFValue(14)}px;   
+
+    text-align: center;
+    justify-content: flex-start;
+`;

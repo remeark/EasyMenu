@@ -47,7 +47,7 @@ export function Register(){
             })
             .catch((error) => {
               console.error("Error writing document: ", error);
-            });
+            });            
   
             setErrorRegister(false);
             navigation.navigate("SignIn", { isCompany: true });
