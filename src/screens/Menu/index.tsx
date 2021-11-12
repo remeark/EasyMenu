@@ -6,6 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { appFirebase, database } from '../../config/firebase';
 
 import { Button } from '../../components/Form/Button';
+import { Loading } from '../../components/Loading';
 import { Header } from '../../components/Header';
 import { HeaderRestaurant } from '../../components/HeaderRestaurant';
 
@@ -27,14 +28,60 @@ import {
 
 
 export function Menu(){
+    const [isLoading, setIsLoading] = useState(false);
     const [selectItem, setSelectItem] = useState([]);
     const [valuePedido, setValuePedido] = useState(0);
     const [restaurantName, setRestaurantName] = useState('');
+    const [idRestaurant, setIdRestaurant] = useState('');
+    const [cardapio, setCardapio] = useState([]);
     
     const theme = useTheme();
 
     const navigation = useNavigation();
     const route = useRoute();
+
+    function getRestaurant(){
+        setIsLoading(true);
+
+        database.collection('company').where("email", "==", route.params.restaurant)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setRestaurantName(doc.data().name);
+
+                // get RestaurantMenu();
+                setCardapio([]);
+                database.collection('company').doc(doc.id).collection('cardapio')
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            setCardapio(cardapio => [...cardapio, {
+                                id: doc.id,
+                                text: doc.data().text,
+                                observations: doc.data().observations,
+                                value: doc.data().value
+                            }]);
+                        });
+                    })
+                    .catch((error) => {
+                        console.log("Error getting documents: ", error);
+                });
+
+                setIdRestaurant(doc.id);
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+
+        setIsLoading(false);
+    }
+
+    function addValue({ value, id }){
+        setValuePedido(valuePedido + Number(value));
+        
+        setSelectItem(selectedItem => [...selectedItem, id]);  
+    }
     
     function removeValue({ value, id }){
         let quantity = selectItem.filter(quantity => quantity === id).length;
@@ -49,55 +96,22 @@ export function Menu(){
             index => index !== id
         ));
     }
-
-    function addValue({ value, id }){
-        setValuePedido(valuePedido + Number(value));
-        
-        setSelectItem(selectedItem => [...selectedItem, id]);  
-    }
     
-    function QRCode(){
-        navigation.navigate('ItensRequest');
+    function itensSelected(){
+        navigation.navigate('ItensRequest', {   
+                itens: selectItem, 
+                total: valuePedido, 
+                restaurantName: restaurantName, 
+                table: route.params.table,
+                idRestaurant: idRestaurant
+            });
     }
 
-    const cardapio = [
-        {
-          id: "1",
-          text: "Xis Salada",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-          id: "2",
-          text: "Xis Frango",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-          id: "3",
-          text: "Xis Coração",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-            id: "4",
-            text: "Xis Coração",
-            observations: "Pão, bife, ovo, queijo, tomate e alface",
-            value: 25
-        },
-      ];      
+    
 
     useEffect(() => {
-        database.collection('company').where("email", "==", route.params.restaurant)
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                setRestaurantName(doc.data().name);
-            });
-        })
-        .catch((error) => {
-            console.log("Error getting documents: ", error);
-        });
+        getRestaurant();
+
     }, []);
 
     return(
@@ -105,6 +119,12 @@ export function Menu(){
                 <Header 
                     name='Marinho'
                 />
+
+                {
+                    isLoading ? 
+                    <Loading />             
+                : 
+                <>
 
                 <HeaderRestaurant 
                     name={restaurantName.toUpperCase()}
@@ -161,10 +181,11 @@ export function Menu(){
 
                     <Button 
                             title="Efetuar Pedido" 
-                            onPress={QRCode}
+                            onPress={itensSelected}
                     />
                 </Footer>
-
+            </>
+            }                                
         </Container>
     )
 };

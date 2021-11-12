@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from 'styled-components';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RadioButton } from 'react-native-paper';
+import firebase from 'firebase';
 
-import { appFirebase } from '../../config/firebase';
+import { appFirebase, database } from '../../config/firebase';
 
 import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
@@ -26,46 +27,56 @@ import {
 
 
 export function ItensRequest(){
-    const [selectItem, setSelectItem] = useState([]);
-    const [valuePedido, setValuePedido] = useState(0);
+    const [cardapio, setCardapio] = useState([]);
 
     const [value, setValue] = React.useState('first');
 
     const theme = useTheme();
 
     const navigation = useNavigation();
-    //const route = useRoute();
-    
-    function QRCode(){
-        navigation.navigate('ChoosePayment');
+    const route = useRoute();
+
+    function getItens(){
+        setCardapio([]);
+
+        database.collection('company').doc(route.params.idRestaurant).collection('cardapio').where(firebase.firestore.FieldPath.documentId(), 'in', route.params.itens)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setCardapio(cardapio => [...cardapio, {
+                    id: doc.id,
+                    text: doc.data().text,
+                    observations: doc.data().observations,
+                    value: doc.data().value,
+                    quantity: getQuantity(doc.id)
+                }]);
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
     }
 
-    const cardapio = [
-        {
-          id: "1",
-          text: "Xis Salada",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-          id: "2",
-          text: "Xis Frango",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-          id: "3",
-          text: "Xis Coração",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-            id: "4",
-            text: "Xis Coração",
-            observations: "Pão, bife, ovo, queijo, tomate e alface",
-            value: 25
-        },
-      ];
+    function getQuantity(id){
+        let count = 0;
+
+        route.params.itens.forEach(element => {
+            if(id === element){
+                count++;
+            }
+        }); 
+        
+        return count;
+    }
+    
+    function QRCode(){
+        //navigation.navigate('ChoosePayment');
+    }
+
+    useEffect(() => {
+        getItens();
+
+    }, []);
 
     return(
         <Container>
@@ -74,11 +85,10 @@ export function ItensRequest(){
                 name='Marinho'
             />
 
-            <HeaderRestaurant 
-                name="Restaurante"
-                table="Mesa 40"
-            />
-
+                <HeaderRestaurant 
+                    name={route.params.restaurantName.toUpperCase()}
+                    table={`Mesa ${route.params.table}`}
+                />
 
 
             <Body>                
@@ -89,8 +99,8 @@ export function ItensRequest(){
                     keyExtractor={item => item.id}
                     renderItem={({ item }) =>
                     <MenuCard>
-                        <TitleData>Quantidade: 1 </TitleData>
-                        <TitleData>{item.text} - R$ {item.value}</TitleData>
+                        <TitleData>{item.text} - R$ {item.value * item.quantity}</TitleData>
+                        <TitleData>Quantidade: {item.quantity} </TitleData>
                     </MenuCard>
                     }
                 />              
@@ -106,7 +116,7 @@ export function ItensRequest(){
                     </Fields>
                 </Form>
                 <Footer>     
-                        <Value>Valor do Pedido: {valuePedido.toLocaleString('pt-BR', {
+                        <Value>Valor do Pedido: {route.params.total.toLocaleString('pt-BR', {
                                                         style: 'currency',
                                                         currency: 'BRL'
                                                     })}
