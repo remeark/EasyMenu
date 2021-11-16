@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useTheme } from 'styled-components';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
-import { appFirebase } from '../../config/firebase';
+import { appFirebase, database } from '../../config/firebase';
 
 import { Button } from '../../components/Form/Button';
 import { Header } from '../../components/Header';
@@ -26,6 +26,8 @@ import {
 } from './styles';
 
 export function RestaurantDashboard(){
+    const [informations, setInformations] = useState([]);
+    const [itens, setItens] = useState([]);
 
     const theme = useTheme();
 
@@ -47,43 +49,48 @@ export function RestaurantDashboard(){
     function cancelProduct(){
         console.log('cancel');
     }
+    
+    async function getPedidos(){
+        setInformations([]);
+        setItens([]);
 
-    const cardapio = [
-        {
-          id: "1",
-          text: "Xis Salada",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-          id: "2",
-          text: "Xis Frango",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-          id: "3",
-          text: "Xis Coração",
-          observations: "Pão, bife, ovo, queijo, tomate e alface",
-          value: 25
-        },
-        {
-            id: "4",
-            text: "Xis Coração",
-            observations: "Pão, bife, ovo, queijo, tomate e alface",
-            value: 25
-        },
-      ];
+        await database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('pedidos')
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
 
-    // useFocusEffect(useCallback(() => {
-    //     const user = appFirebase.auth().currentUser;
+                setInformations(informations => [...informations, {
+                    id: doc.id,
+                    numPedido: doc.data().id,
+                    table: doc.data().mesa,
+                    observations: doc.data().observations,
+                    value: doc.data().value,                    
+                }]);
 
-    //     if (user) {
-    //         console.log("logado");
-    //     } else {
-    //         console.log("na ologado");
-    //     }
-    // }, []));
+                database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('pedidos').doc(doc.id).collection('item')
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((item) => {
+                            setItens(itens => [...itens, {
+                                name: item.data().item,
+                                quantity: Number(item.data().quantity)
+                            }]);
+                        });
+                    })
+                    .catch((error) => {
+                        console.log("Error getting documents: ", error);
+                });   
+            });   
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+    }
+    
+    useFocusEffect(useCallback(() => {
+        getPedidos();
+    }, []));
+      
 
     return(
         <Container>                 
@@ -108,19 +115,21 @@ export function RestaurantDashboard(){
 
 
                     <MenuList 
-                            data={cardapio}
+                            data={informations}
                             keyExtractor={item => item.id}
                             renderItem={({ item }) =>
                             <MenuCard> 
                                 <TitleMenuCard>
-                                    Mesa 45 - Pedido 2032
+                                    Mesa {item.table} - Pedido {item.numPedido}
                                 </TitleMenuCard>
 
                                 <Observations>
-                                    1 - {item.text} - sem tomate {'\n'}
-                                    2 - {item.text} - sem ervilha {'\n'}
-                                    3 - {item.text} - sem salada {'\n'}
+                                    {
+                                        itens.map(itens => <Observations key={item.name}>{itens.name.toUpperCase()} - Quantidade: {itens.quantity} {'\n'}</Observations>)
+                                    }                                    
                                 </Observations>
+
+                                <Observations>Observações: {item.observations.toUpperCase()}</Observations>
 
                                 <FooterMenuCard>
                                     <ButtonDone

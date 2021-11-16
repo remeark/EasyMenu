@@ -38,7 +38,6 @@ export function SignIn(){
     const theme = useTheme();     
 
     function Login(){
-        console.log("opaa ");
         setIsLoading(true);
         
         appFirebase.auth().signInWithEmailAndPassword(email, password)
@@ -73,7 +72,6 @@ export function SignIn(){
             
             setErrorLogin(true);
         });
-        console.log("opa saiu");
     };
 
     useEffect(() => {
@@ -83,7 +81,7 @@ export function SignIn(){
                     if ( route.params.isCompany ) {
                         database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
                             if(doc.data().cnpj){
-                                navigation.navigate('RestaurantDashboard', { isCompany: route.params.isCompany })
+                                navigation.navigate('RestaurantDashboard', { isCompany: route.params.isCompany, email: email })
                             }                        
                         });
                     } else {

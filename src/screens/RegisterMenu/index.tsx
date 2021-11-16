@@ -30,25 +30,24 @@ export function RegisterMenu(){
 
     function registerProduct(){
 
-        database.collection('company').doc('WEQ4d13uTKUKjoHLcoI20wXZsla2')
+        database.collection('company').doc(appFirebase.auth().currentUser.uid)
             .get().then(
             doc => {
             if (doc.exists) {
-                database.collection('users').doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio').get().
+                database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio').get().
                 then(sub => {
                     if (sub.docs.length > 0) {
                         setExists(true);
-                        console.log("true");
                     }
                 });
             }
         });
 
         if(exists){
-            database.collection("company").doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio').add({
+            database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('cardapio').add({
                 text: productName,
                 observations: productIngredients,
-                value: productValue
+                value: +productValue
             }).then(() => {
                 navigation.navigate('RestaurantDashboard');
             })
@@ -56,10 +55,10 @@ export function RegisterMenu(){
                 console.error("Error adding document: ", error);
             });
         } else {
-            database.collection("company").doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio').doc().set({
+            database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('cardapio').doc().set({
                 text: productName,
                 observations: productIngredients,
-                value: productValue
+                value: +productValue
             }).then(() => {
                 navigation.navigate('RestaurantDashboard');
             })
@@ -68,8 +67,6 @@ export function RegisterMenu(){
             });
         }
     }
-
-
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>     

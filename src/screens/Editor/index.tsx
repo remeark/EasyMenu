@@ -38,7 +38,7 @@ export function Editor(){
         setIsLoading(true);
         setCardapio([]);
 
-        await database.collection('company').doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio')
+        await database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio')
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {

@@ -31,7 +31,7 @@ export function EditorMenu(){
     const route = useRoute();
 
     function updateProduct(){
-        database.collection('company').doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio').doc(route.params.idItem).update({
+        database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio').doc(route.params.idItem).update({
             text: productName,
             observations: productIngredients,
             value: +productValue
@@ -45,7 +45,7 @@ export function EditorMenu(){
     }
 
     function deleteItem(){
-        database.collection('company').doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio').doc(route.params.idItem).delete().then(() => {
+        database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio').doc(route.params.idItem).delete().then(() => {
             console.log("Document successfully deleted!");
             navigation.navigate('Editor');
         }).catch((error) => {
@@ -54,7 +54,7 @@ export function EditorMenu(){
     }
 
     useEffect(() => {
-        database.collection('company').doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio').doc(route.params.idItem)
+        database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio').doc(route.params.idItem)
         .get()
         .then((doc) => {
                 setProductName(doc.data().text);
