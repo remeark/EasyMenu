@@ -38,10 +38,13 @@ export function SignIn(){
     const theme = useTheme();     
 
     function Login(){
+        console.log("opaa ");
+        setIsLoading(true);
+        
         appFirebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             var user = userCredential.user;
-            setIsLoading(true);
+            
             setErrorLogin(false);
 
             try {
@@ -66,9 +69,11 @@ export function SignIn(){
         .catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;  
+            console.log(error);
             
             setErrorLogin(true);
         });
+        console.log("opa saiu");
     };
 
     useEffect(() => {
@@ -113,7 +118,7 @@ export function SignIn(){
 
                 <SignInTitle>
                     Faça seu login com {'\n'}
-                    uma das contas abaixo
+                    seu e-mail e senha
                 </SignInTitle>
             </Header>
 

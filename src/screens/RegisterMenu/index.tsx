@@ -48,7 +48,7 @@ export function RegisterMenu(){
             database.collection("company").doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio').add({
                 text: productName,
                 observations: productIngredients,
-                value: +productValue
+                value: productValue
             }).then(() => {
                 navigation.navigate('RestaurantDashboard');
             })
@@ -59,7 +59,7 @@ export function RegisterMenu(){
             database.collection("company").doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio').doc().set({
                 text: productName,
                 observations: productIngredients,
-                value: +productValue
+                value: productValue
             }).then(() => {
                 navigation.navigate('RestaurantDashboard');
             })
@@ -74,9 +74,8 @@ export function RegisterMenu(){
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>     
             <Container>  
-                <Header 
-                    name='Restaurante'
-                />
+                <Header isCompany={true}/>
+
                     <Title> Cadastrar Produtos </Title>
 
                     <Form>
@@ -91,6 +90,7 @@ export function RegisterMenu(){
                             <Input
                                 name="valor"
                                 placeholder="Valor do produto"
+                                keyboardType = 'numeric'
                                 value={productValue}
                                 onChangeText={(productValue) => setProductValue(productValue)}
                             /> 

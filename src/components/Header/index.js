@@ -15,25 +15,24 @@ import {
     Icon
 } from './styles';
 
-export function Header(){
+export function Header({ isCompany }){
     const [userName, setUserName] = useState('');
     const navigation = useNavigation();
-    // const route = useRoute();
-
-    // if(route.params.isCompany) {
-    //     database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
-    //         setUserName(doc.data().name);
-    //     });
-    // }
-    // else {
-    //     database.collection('users').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
-    //         setUserName(doc.data().name);
-    //     });
-    // }       
+    
+    if(isCompany) {
+        database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+            setUserName(doc.data().name);
+        });
+    }
+    else {
+        database.collection('users').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
+            setUserName(doc.data().name);
+        });
+    }    
 
     function signOut(){
         appFirebase.auth().signOut().then(() => {
-            navigation.navigate('SelectWay');
+            navigation.navigate('SelectWay');      
           }).catch((error) => {
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -49,7 +48,7 @@ export function Header(){
                     
                     <User>
                         <UserGreeting>Olá, </UserGreeting>
-                        <UserName>{userName}</UserName>
+                        <UserName>{userName.toUpperCase()}</UserName>
                     </User>
 
                 </UserInfo>

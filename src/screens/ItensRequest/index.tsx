@@ -11,6 +11,7 @@ import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 import { HeaderRestaurant } from '../../components/HeaderRestaurant';
+import {Loading} from '../../components/Loading';
 
 import { 
     Container, 
@@ -26,20 +27,21 @@ import {
 } from './styles';
 
 
-export function ItensRequest(){
-    const [cardapio, setCardapio] = useState([]);
-
-    const [value, setValue] = React.useState('first');
+export function ItensRequest(){    
+    const [cardapio, setCardapio] = useState([]);    
+    const [observations, setObservations] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const theme = useTheme();
 
     const navigation = useNavigation();
     const route = useRoute();
 
-    function getItens(){
+    async function getItens(){
+        setIsLoading(true);
         setCardapio([]);
 
-        database.collection('company').doc(route.params.idRestaurant).collection('cardapio').where(firebase.firestore.FieldPath.documentId(), 'in', route.params.itens)
+        await database.collection('company').doc(route.params.idRestaurant).collection('cardapio').where(firebase.firestore.FieldPath.documentId(), 'in', route.params.itens)
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -55,6 +57,8 @@ export function ItensRequest(){
         .catch((error) => {
             console.log("Error getting documents: ", error);
         });
+
+        setIsLoading(false);
     }
 
     function getQuantity(id){
@@ -65,25 +69,28 @@ export function ItensRequest(){
                 count++;
             }
         }); 
-        
+
         return count;
     }
     
-    function QRCode(){
-        //navigation.navigate('ChoosePayment');
+    function finalizeRequest(){
+        navigation.navigate('ChoosePayment', { restaurantName: route.params.restaurantName, table: route.params.table, total: route.params.total });
     }
 
     useEffect(() => {
         getItens();
-
     }, []);
 
     return(
         <Container>
                 
-            <Header 
-                name='Marinho'
-            />
+            <Header isCompany={false}/>
+
+            {
+                isLoading ? 
+                <Loading />             
+            : 
+            <>
 
                 <HeaderRestaurant 
                     name={route.params.restaurantName.toUpperCase()}
@@ -91,43 +98,47 @@ export function ItensRequest(){
                 />
 
 
-            <Body>                
-                <Title>Itens do Pedido</Title> 
+                <Body>                
+                    <Title>Itens do Pedido</Title> 
 
-                <MenuList 
-                    data={cardapio}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) =>
-                    <MenuCard>
-                        <TitleData>{item.text} - R$ {item.value * item.quantity}</TitleData>
-                        <TitleData>Quantidade: {item.quantity} </TitleData>
-                    </MenuCard>
-                    }
-                />              
-                
-                <Form>
-                    <Fields>
-                            <TitleData>Observações</TitleData>
-                            <Input
-                                name="observations"
-                                placeholder="Retirar tomate, maionese a parte..."
-                                autoCapitalize="none"
-                            />    
-                    </Fields>
-                </Form>
-                <Footer>     
-                        <Value>Valor do Pedido: {route.params.total.toLocaleString('pt-BR', {
-                                                        style: 'currency',
-                                                        currency: 'BRL'
-                                                    })}
-                        </Value>
+                    <MenuList 
+                        data={cardapio}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) =>
+                        <MenuCard>
+                            <TitleData>{item.text} - R$ {item.value * item.quantity}</TitleData>
+                            <TitleData>Quantidade: {item.quantity} </TitleData>
+                        </MenuCard>
+                        }
+                    />              
+                    
+                    <Form>
+                        <Fields>
+                                <TitleData>Observações</TitleData>
+                                <Input
+                                    name="observations"
+                                    placeholder="Retirar tomate, maionese a parte..."
+                                    autoCapitalize="none"
+                                    value={observations}
+                                    onValueChange={observations => setObservations(observations)}
+                                />    
+                        </Fields>
+                    </Form>
+                    <Footer>     
+                            <Value>Valor do Pedido: {route.params.total.toLocaleString('pt-BR', {
+                                                            style: 'currency',
+                                                            currency: 'BRL'
+                                                        })}
+                            </Value>
 
-                        <Button 
-                                title="Finalizar Pedido" 
-                                onPress={QRCode}
-                        />
-                    </Footer> 
-            </Body>     
+                            <Button 
+                                    title="Finalizar Pedido" 
+                                    onPress={finalizeRequest}
+                            />
+                        </Footer> 
+                </Body>   
+            </>
+        }  
         </Container>
     )
 };

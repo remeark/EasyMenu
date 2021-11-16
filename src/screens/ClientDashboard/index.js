@@ -61,7 +61,7 @@ export function ClientDashboard(){
 
     return(
         <Container>                 
-                <Header />
+                <Header isCompany={false}/>
 
                 <Body> 
                     {scan ?

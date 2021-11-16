@@ -11,15 +11,19 @@ import { HeaderRestaurant } from '../../components/HeaderRestaurant';
 import { 
     Container, 
     Body,
-    Title
+    Title,
+    ButtonDone,
+    ButtonUndone,
+    Buttons,
+    ButtonTitle
 } from './styles';
 
-export function PaymentApproved(){
+export function MoneyPayment(){
 
     const theme = useTheme();
 
     const navigation = useNavigation();
-    //const route = useRoute();    
+    const route = useRoute();    
     
     function returnToBegin(){
         navigation.navigate('ClientDashboard');
@@ -40,16 +44,21 @@ export function PaymentApproved(){
                 <Header isCompany={false}/>
 
                 <HeaderRestaurant 
-                    name="Restaurante"
-                    table="Mesa 00"
+                    name={route.params.restaurantName.toUpperCase()}
+                    table={`Mesa ${route.params.table}`}
                 />
 
                 <Body> 
-                    <Title>Pagamento aprovado!</Title>
-                    <Button 
-                            title="Retornar ao início" 
-                            onPress={returnToBegin}
-                    />
+                    <Title>Finalizar Pedido</Title>
+                    <Title>Valor Total: {route.params.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Title>
+                    <Buttons> 
+                        <ButtonDone onPress={returnToBegin}>
+                            <ButtonTitle>Finalizar</ButtonTitle>
+                        </ButtonDone>
+                        <ButtonUndone onPress={returnToBegin}>
+                            <ButtonTitle>Cancelar</ButtonTitle>
+                        </ButtonUndone>
+                    </Buttons>
                 </Body>
 
         </Container>

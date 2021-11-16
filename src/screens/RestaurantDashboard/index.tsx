@@ -87,9 +87,7 @@ export function RestaurantDashboard(){
 
     return(
         <Container>                 
-                <Header 
-                    name='Restaurante'
-                />
+                <Header isCompany={true}/>
 
                 <HeaderButtons>
                     <Button 

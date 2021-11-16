@@ -34,9 +34,11 @@ export function Editor(){
         navigation.navigate('EditorMenu', { idItem: id });
     }
 
-    function renderMenu(){
+    async function renderMenu(){
+        setIsLoading(true);
         setCardapio([]);
-        database.collection('company').doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio')
+
+        await database.collection('company').doc('WEQ4d13uTKUKjoHLcoI20wXZsla2').collection('cardapio')
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -61,19 +63,18 @@ export function Editor(){
 
     return(
         <Container>              
-                <Header 
-                    name='Restaurante'
-                />
-
-                <Body>
-
-                <Title>Editar Produtos </Title>
+                <Header isCompany={true}/>
 
                 {
                     isLoading ? 
                     <Loading />             
                 : 
                 <>  
+
+                <Body>
+
+                <Title>Editar Produtos </Title>
+
                     <MenuList 
                         data={cardapio}
                         keyExtractor={item => item.id}
@@ -90,11 +91,10 @@ export function Editor(){
                             </MenuCard>
                         </TouchableOpacity>
                         }
-                    />     
-                </>    
-                }             
-
+                    /> 
                 </Body>
+            </>    
+            } 
                 
         </Container>
     )

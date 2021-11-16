@@ -69,9 +69,8 @@ export function EditorMenu(){
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>     
             <Container>  
-                <Header 
-                    name='Restaurante'
-                />
+            <Header isCompany={true}/>
+
                     <Title> Editar Produtos </Title>
 
                     <Form>
@@ -86,6 +85,7 @@ export function EditorMenu(){
                             <Input
                                 name="valor"
                                 placeholder="Valor do produto"
+                                keyboardType = 'numeric'
                                 value={productValue}
                                 onChangeText={(productValue) => setProductValue(productValue)}
                             /> 

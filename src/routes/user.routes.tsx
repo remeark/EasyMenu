@@ -3,10 +3,21 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { ClientDashboard } from '../screens/ClientDashboard';
 import { Menu } from '../screens/Menu';
-import { Payment } from '../screens/Payment';
+import { CardPayment } from '../screens/CardPayment';
+import { MoneyPayment } from '../screens/MoneyPayment';
 import { PaymentApproved } from '../screens/PaymentApproved';
 import { ItensRequest } from '../screens/ItensRequest';
 import { ChoosePayment } from '../screens/ChoosePayment';
+import { RestaurantDashboard } from '../screens/RestaurantDashboard';
+import { RegisterMenu } from '../screens/RegisterMenu';
+import { EditorMenu } from '../screens/EditorMenu';
+import { Editor } from '../screens/Editor';
+
+import { SelectWay } from '../screens/SelectWay';
+import { SignIn } from '../screens/SignIn';
+import { UserRegister } from '../screens/UserRegister';
+import { Register } from '../screens/Register';
+
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -15,6 +26,22 @@ export function UserRoutes(){
         <Navigator screenOptions={{
             headerShown: false,
         }}>
+            <Screen 
+                name="SelectWay"
+                component={SelectWay}
+            />
+            <Screen 
+                name="SignIn"
+                component={SignIn}
+            />
+            <Screen 
+                name="UserRegister"
+                component={UserRegister}
+            />
+            <Screen 
+                name="Register"
+                component={Register}
+            />
             <Screen 
                 name="ClientDashboard"
                 component={ClientDashboard}
@@ -32,13 +59,33 @@ export function UserRoutes(){
                 component={ChoosePayment}
             />
             <Screen 
-                name="Payment"
-                component={Payment}
+                name="CardPayment"
+                component={CardPayment}
+            />
+            <Screen 
+                name="MoneyPayment"
+                component={MoneyPayment}
             />
             <Screen 
                 name="PaymentApproved"
                 component={PaymentApproved}
-            />                     
+            />  
+            <Screen 
+                name="RestaurantDashboard"
+                component={RestaurantDashboard}
+            />   
+            <Screen 
+                name="RegisterMenu"
+                component={RegisterMenu}
+            />
+            <Screen 
+                name="EditorMenu"
+                component={EditorMenu}
+            />
+            <Screen 
+                name="Editor"
+                component={Editor}
+            />                             
         </Navigator>
     )
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from 'styled-components';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { appFirebase, database } from '../../config/firebase';
@@ -40,10 +40,10 @@ export function Menu(){
     const navigation = useNavigation();
     const route = useRoute();
 
-    function getRestaurant(){
+    async function getRestaurant(){
         setIsLoading(true);
 
-        database.collection('company').where("email", "==", route.params.restaurant)
+        await database.collection('company').where("email", "==", route.params.restaurant)
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -59,7 +59,7 @@ export function Menu(){
                                 id: doc.id,
                                 text: doc.data().text,
                                 observations: doc.data().observations,
-                                value: doc.data().value
+                                value: Number(doc.data().value)
                             }]);
                         });
                     })
@@ -98,27 +98,27 @@ export function Menu(){
     }
     
     function itensSelected(){
-        navigation.navigate('ItensRequest', {   
+        if(selectItem.length > 0){
+            navigation.navigate('ItensRequest', {   
                 itens: selectItem, 
                 total: valuePedido, 
                 restaurantName: restaurantName, 
                 table: route.params.table,
                 idRestaurant: idRestaurant
             });
+        }
+        else {
+            Alert.alert("Nenhum produto selecionado");
+        }        
     }
-
-    
 
     useEffect(() => {
         getRestaurant();
-
     }, []);
 
     return(
         <Container>                 
-                <Header 
-                    name='Marinho'
-                />
+                <Header isCompany={false}/>
 
                 {
                     isLoading ? 

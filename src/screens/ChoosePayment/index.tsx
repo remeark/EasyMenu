@@ -23,11 +23,11 @@ export function ChoosePayment(){
     const route = useRoute();    
     
     function card(){
-        navigation.navigate('CardPayment', { restaurantName: route.params.restaurantName, table: route.params.table });
+        navigation.navigate('CardPayment', { restaurantName: route.params.restaurantName, table: route.params.table, total: route.params.total });
     }
 
     function money(){
-        navigation.navigate('PaymentApproved', { restaurantName: route.params.restaurantName, table: route.params.table });
+        navigation.navigate('MoneyPayment', { restaurantName: route.params.restaurantName, table: route.params.table, total: route.params.total });
     }
 
     return(
