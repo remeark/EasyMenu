@@ -5,7 +5,7 @@ import { ClientDashboard } from '../screens/ClientDashboard';
 import { Menu } from '../screens/Menu';
 import { CardPayment } from '../screens/CardPayment';
 import { MoneyPayment } from '../screens/MoneyPayment';
-import { PaymentApproved } from '../screens/PaymentApproved';
+import { PedidoApproved } from '../screens/PedidoApproved';
 import { ItensRequest } from '../screens/ItensRequest';
 import { ChoosePayment } from '../screens/ChoosePayment';
 import { RestaurantDashboard } from '../screens/RestaurantDashboard';
@@ -67,8 +67,8 @@ export function UserRoutes(){
                 component={MoneyPayment}
             />
             <Screen 
-                name="PaymentApproved"
-                component={PaymentApproved}
+                name="PedidoApproved"
+                component={PedidoApproved}
             />  
             <Screen 
                 name="RestaurantDashboard"

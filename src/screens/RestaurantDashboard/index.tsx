@@ -72,6 +72,7 @@ export function RestaurantDashboard(){
                     .then((querySnapshot) => {
                         querySnapshot.forEach((item) => {
                             setItens(itens => [...itens, {
+                                id: doc.id,
                                 name: item.data().item,
                                 quantity: Number(item.data().quantity)
                             }]);
@@ -85,6 +86,10 @@ export function RestaurantDashboard(){
         .catch((error) => {
             console.log("Error getting documents: ", error);
         });
+    }
+
+    function refresh(){
+        getPedidos();
     }
     
     useFocusEffect(useCallback(() => {
@@ -110,12 +115,14 @@ export function RestaurantDashboard(){
                 <Body> 
                     <TitleProps>
                         <Title>Pedidos em aberto</Title>
-                        <Icon name="refresh-ccw"/>
+                        <TouchableOpacity onPress={refresh}>
+                            <Icon name="refresh-ccw"/>
+                        </TouchableOpacity>
                     </TitleProps>
 
 
                     <MenuList 
-                            data={informations}
+                            data={informations.sort((a, b) => a.numPedido > b.numPedido)}
                             keyExtractor={item => item.id}
                             renderItem={({ item }) =>
                             <MenuCard> 
@@ -124,8 +131,8 @@ export function RestaurantDashboard(){
                                 </TitleMenuCard>
 
                                 <Observations>
-                                    {
-                                        itens.map(itens => <Observations key={item.name}>{itens.name.toUpperCase()} - Quantidade: {itens.quantity} {'\n'}</Observations>)
+                                    {   
+                                        itens.map(itens => itens.id === item.id ? <Observations key={item.name}> {itens.name.toUpperCase()} - Qtd: {itens.quantity} {'\n'}</Observations> : <Observations/>)
                                     }                                    
                                 </Observations>
 

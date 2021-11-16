@@ -29,43 +29,17 @@ export function RegisterMenu(){
     const navigation = useNavigation();
 
     function registerProduct(){
-
-        database.collection('company').doc(appFirebase.auth().currentUser.uid)
-            .get().then(
-            doc => {
-            if (doc.exists) {
-                database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio').get().
-                then(sub => {
-                    if (sub.docs.length > 0) {
-                        setExists(true);
-                    }
-                });
-            }
-        });
-
-        if(exists){
-            database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('cardapio').add({
-                text: productName,
-                observations: productIngredients,
-                value: +productValue
-            }).then(() => {
-                navigation.navigate('RestaurantDashboard');
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-        } else {
-            database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('cardapio').doc().set({
-                text: productName,
-                observations: productIngredients,
-                value: +productValue
-            }).then(() => {
-                navigation.navigate('RestaurantDashboard');
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-        }
+        
+        database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('cardapio').add({
+            text: productName,
+            observations: productIngredients,
+            value: +productValue
+        }).then(() => {
+            navigation.navigate('RestaurantDashboard');
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });        
     }
 
     return (

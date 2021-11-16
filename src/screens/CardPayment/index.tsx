@@ -35,7 +35,7 @@ export function CardPayment(){
     const route = useRoute();
     
     function QRCode(){
-        navigation.navigate('PaymentApproved');
+        navigation.navigate('PedidoApproved');
     }
 
     return(

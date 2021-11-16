@@ -2,8 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { useTheme } from 'styled-components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { appFirebase } from '../../config/firebase';
-
 import { Button } from '../../components/Form/Button';
 import { Header } from '../../components/Header';
 import { HeaderRestaurant } from '../../components/HeaderRestaurant';
@@ -14,16 +12,16 @@ import {
     Title
 } from './styles';
 
-export function PaymentApproved(){
+export function PedidoApproved(){
 
     const theme = useTheme();
 
     const navigation = useNavigation();
-    //const route = useRoute();    
+    const route = useRoute();    
     
     function returnToBegin(){
         navigation.navigate('ClientDashboard');
-    }
+    }  
 
     // useFocusEffect(useCallback(() => {
     //     const user = appFirebase.auth().currentUser;
@@ -40,12 +38,12 @@ export function PaymentApproved(){
                 <Header isCompany={false}/>
 
                 <HeaderRestaurant 
-                    name="Restaurante"
-                    table="Mesa 00"
+                    name={route.params.restaurantName.toUpperCase()}
+                    table={`Mesa ${route.params.table}`}
                 />
 
                 <Body> 
-                    <Title>Pagamento aprovado!</Title>
+                    <Title>Pedido aprovado! - Nº {route.params.idPedido}</Title>
                     <Button 
                             title="Retornar ao início" 
                             onPress={returnToBegin}

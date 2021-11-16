@@ -2,7 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { useTheme } from 'styled-components';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { appFirebase } from '../../config/firebase';
+import firebase from 'firebase';
+
+import { appFirebase, database } from '../../config/firebase';
 
 import { Button } from '../../components/Form/Button';
 import { Header } from '../../components/Header';
@@ -23,9 +25,68 @@ export function MoneyPayment(){
     const theme = useTheme();
 
     const navigation = useNavigation();
-    const route = useRoute();    
-    
-    function returnToBegin(){
+    const route = useRoute();
+
+    function finalize(){         
+        
+        let date = new Date();
+        let idPedido = date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString();
+
+        database.collection("company").doc(route.params.idRestaurant).collection('pedidos').add({
+            id: idPedido,
+            mesa: route.params.table,
+            observations: route.params.observations,
+            value: +route.params.total
+        }).then((doc) => {
+            addItens(doc.id);
+
+            navigation.navigate('PedidoApproved', {
+                idPedido: idPedido,
+                table: route.params.table,
+                restaurantName: route.params.restaurantName
+            });
+
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });        
+    }
+
+    function addItens(id){
+
+        database.collection('company').doc(route.params.idRestaurant).collection('cardapio').where(firebase.firestore.FieldPath.documentId(), 'in', route.params.itens)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                
+                database.collection("company").doc(route.params.idRestaurant).collection('pedidos').doc(id).collection('item').add({
+                    item: doc.data().text,
+                    quantity: getQuantity(doc.id)
+                })
+                .catch((error) => {
+                    console.error("Error adding itens: ", error);
+                });
+
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });  
+    }
+
+    function getQuantity(id){
+        let count = 0;
+
+        route.params.itens.forEach(element => {
+            if(id === element){
+                count++;
+            }
+        }); 
+
+        return count;
+    }
+
+    function cancel(){
         navigation.navigate('ClientDashboard');
     }
 
@@ -52,10 +113,10 @@ export function MoneyPayment(){
                     <Title>Finalizar Pedido</Title>
                     <Title>Valor Total: {route.params.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Title>
                     <Buttons> 
-                        <ButtonDone onPress={returnToBegin}>
+                        <ButtonDone onPress={finalize}>
                             <ButtonTitle>Finalizar</ButtonTitle>
                         </ButtonDone>
-                        <ButtonUndone onPress={returnToBegin}>
+                        <ButtonUndone onPress={cancel}>
                             <ButtonTitle>Cancelar</ButtonTitle>
                         </ButtonUndone>
                     </Buttons>

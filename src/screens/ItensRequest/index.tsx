@@ -74,7 +74,13 @@ export function ItensRequest(){
     }
     
     function finalizeRequest(){
-        navigation.navigate('ChoosePayment', { restaurantName: route.params.restaurantName, table: route.params.table, total: route.params.total });
+        navigation.navigate('ChoosePayment', { 
+            restaurantName: route.params.restaurantName, 
+            itens: route.params.itens,
+            table: route.params.table, 
+            total: route.params.total, 
+            observations: observations,            
+            idRestaurant: route.params.idRestaurant });
     }
 
     useEffect(() => {
@@ -116,11 +122,11 @@ export function ItensRequest(){
                         <Fields>
                                 <TitleData>Observações</TitleData>
                                 <Input
-                                    name="observations"
+                                    name="Observations"
                                     placeholder="Retirar tomate, maionese a parte..."
                                     autoCapitalize="none"
                                     value={observations}
-                                    onValueChange={observations => setObservations(observations)}
+                                    onChangeText={obs => setObservations(obs)}
                                 />    
                         </Fields>
                     </Form>
