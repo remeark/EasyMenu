@@ -20,25 +20,23 @@ export function ChoosePayment(){
     const theme = useTheme();
 
     const navigation = useNavigation();
-    //const route = useRoute();    
+    const route = useRoute();    
     
     function card(){
-        navigation.navigate('Payment');
+        navigation.navigate('CardPayment', { restaurantName: route.params.restaurantName, table: route.params.table });
     }
 
     function money(){
-        navigation.navigate('PaymentApproved');
+        navigation.navigate('PaymentApproved', { restaurantName: route.params.restaurantName, table: route.params.table });
     }
 
     return(
         <Container>                 
-                <Header 
-                    name='Marinho'
-                />
+                <Header isCompany={false}/>
 
                 <HeaderRestaurant 
-                name="Restaurante"
-                table="Mesa 40"
+                    name={route.params.restaurantName.toUpperCase()}
+                    table={`Mesa ${route.params.table}`}
                 />
 
                 <Title>Pagamento</Title>
