@@ -41,6 +41,9 @@ export function ClientDashboard(){
     };   
 
     function scanRequest(){
+
+        // navigation.navigate('Menu', { restaurant: 'peninha@gmail.com', table: '40' });
+
         setScan(true);
         setScanned(false);
     }

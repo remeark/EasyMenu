@@ -42,12 +42,33 @@ export function RestaurantDashboard(){
         navigation.navigate('Editor');
     }
 
-    function doneProduct(){
-        console.log('done');
+    async function doneProduct({id, numPedido, table, value}){
+        await database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('finalizados').add({
+            id: numPedido,
+            mesa: table,
+            value: +value
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
+
+        await database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('pedidos').doc(id)
+        .delete()
+        .catch((error) => {
+            console.error("Delete document failed ", error);
+        });
+
+        getPedidos();
     }
 
-    function cancelProduct(){
-        console.log('cancel');
+    async function cancelProduct({id}){
+        await database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('pedidos').doc(id)
+        .delete()
+        .catch((error) => {
+            console.error("Delete document failed ", error);
+        });
+
+        getPedidos();
     }
     
     async function getPedidos(){
@@ -132,7 +153,13 @@ export function RestaurantDashboard(){
 
                                 <Observations>
                                     {   
-                                        itens.map(itens => itens.id === item.id ? <Observations key={item.name}> {itens.name.toUpperCase()} - Qtd: {itens.quantity} {'\n'}</Observations> : <Observations/>)
+                                        itens.map(itens => itens.id === item.id 
+                                            ? 
+                                            <Observations key={itens.name}> 
+                                                {itens.name.toUpperCase()} - Qtd: {itens.quantity} {'\n'}
+                                            </Observations> 
+                                            : 
+                                            <Observations/>)
                                     }                                    
                                 </Observations>
 
@@ -140,13 +167,13 @@ export function RestaurantDashboard(){
 
                                 <FooterMenuCard>
                                     <ButtonDone
-                                        onPress={doneProduct}
+                                        onPress={() => doneProduct(item)}
                                     >   
                                         <ButtonTitle>Finalizar</ButtonTitle>
                                     </ButtonDone>
 
                                     <ButtonUndone
-                                        onPress={cancelProduct}
+                                        onPress={() => cancelProduct(item)}
                                     >   
                                         <ButtonTitle>Cancelar</ButtonTitle>
                                     </ButtonUndone>    

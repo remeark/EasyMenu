@@ -56,7 +56,6 @@ export function SignIn(){
                 } else {
                     database.collection('users').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
                         if(doc.data().name){
-                            console.log('enrtou');
                             navigation.navigate('ClientDashboard', { isCompany: route.params.isCompany })
                         }
                     });
