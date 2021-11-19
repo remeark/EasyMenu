@@ -89,7 +89,7 @@ export function MoneyPayment(){
     }
 
     function cancel(){
-        navigation.navigate('ClientDashboard');
+        navigation.goBack();
     }
 
     // useFocusEffect(useCallback(() => {

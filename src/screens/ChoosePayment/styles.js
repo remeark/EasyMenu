@@ -22,7 +22,7 @@ export const Title = styled.Text`
 export const HeaderButtons = styled.View`
     margin-top: 10px;
     padding: 0 24px;
-    height: 130px;
+    height: 200px;
 
     justify-content: space-between;
     align-content: flex-start;

@@ -1,14 +1,11 @@
-import React, { 
-    useState, 
-    useEffect 
-} from 'react';
+import React, { useState } from 'react';
 import { 
     Keyboard, 
     TouchableWithoutFeedback,
 } from 'react-native';
 
 import { appFirebase, database } from '../../config/firebase';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Button } from '../../components/Form/Button';
 
 import { 
@@ -16,62 +13,41 @@ import {
     Title,
     Form,
     Fields,
-    DeleteText
+    ErrorRegister,
+    ErrorRegisterText
 } from './styles';
-
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 
-export function EditorMenu(){    
+export function RegisterMenu(){    
     const [productName, setProductName] = useState('');
-    const [productValue, setProductValue] = useState(0);
+    const [productValue, setProductValue] = useState('');
     const [productIngredients, setProductIngredients] = useState('');
 
-    const navigation = useNavigation();
-    const route = useRoute();
+    const [exists, setExists] = useState(false);
 
-    function updateProduct(){
-        database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio').doc(route.params.idItem).update({
+    const navigation = useNavigation();
+
+    function registerProduct(){
+        
+        database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('cardapio').add({
             text: productName,
             observations: productIngredients,
             value: +productValue
-        })
-        .then(() => {
-            console.log("Document successfully updated!");
-            navigation.navigate('Editor');
-        }).catch((error) =>{
-            console.log("Document error");
-        });
-    }
-
-    function deleteItem(){
-        database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio').doc(route.params.idItem).delete().then(() => {
-            console.log("Document successfully deleted!");
-            navigation.navigate('Editor');
-        }).catch((error) => {
-            console.error("Error removing document: ", error);
-        });
-    }
-
-    useEffect(() => {
-        database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('cardapio').doc(route.params.idItem)
-        .get()
-        .then((doc) => {
-                setProductName(doc.data().text);
-                setProductIngredients(doc.data().observations);
-                setProductValue(doc.data().value.toString());
+        }).then(() => {
+            navigation.navigate('RestaurantDashboard');
         })
         .catch((error) => {
-            console.log("Error getting documents: ", error);
-        });
-    }, []);
+            console.error("Error adding document: ", error);
+        });        
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>     
             <Container>  
-            <Header isCompany={true}/>
+                <Header isCompany={true}/>
 
-                    <Title> Editar Produtos </Title>
+                    <Title> Cadastrar Produtos </Title>
 
                     <Form>
                         <Fields>
@@ -86,7 +62,7 @@ export function EditorMenu(){
                                 name="valor"
                                 placeholder="Valor do produto"
                                 keyboardType = 'numeric'
-                                value={productValue}
+                                value={productValue.toString()}
                                 onChangeText={(productValue) => setProductValue(productValue)}
                             /> 
 
@@ -95,18 +71,13 @@ export function EditorMenu(){
                                 placeholder="Ingredientes"
                                 value={productIngredients}
                                 onChangeText={(productIngredients) => setProductIngredients(productIngredients)}
-                            />   
-
-                            <DeleteText 
-                                onPress={deleteItem}> 
-                                Excluir Item
-                            </DeleteText>       
+                            />           
                                     
-                        </Fields>                        
+                        </Fields>
 
                         <Button 
-                            title="Editar Produto" 
-                            onPress={updateProduct}
+                            title="Cadastrar Produto" 
+                            onPress={registerProduct}
                         />
                     </Form>
             </Container>

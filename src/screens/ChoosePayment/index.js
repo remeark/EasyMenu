@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useTheme } from 'styled-components';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, StackActions  } from '@react-navigation/native';
 
 import { appFirebase } from '../../config/firebase';
 
@@ -13,6 +13,7 @@ import {
     HeaderButtons,
     Title
 } from './styles';
+
 import { HeaderRestaurant } from '../../components/HeaderRestaurant';
 
 export function ChoosePayment(){
@@ -62,7 +63,11 @@ export function ChoosePayment(){
                             title="Dinheiro" 
                             onPress={money}
                     />
-                </HeaderButtons>                
+                    <Button 
+                        title="Retornar ao Cardápio" 
+                        onPress={() => navigation.dispatch(StackActions.pop(2))}
+                    />   
+                </HeaderButtons>                             
 
         </Container>
     )
