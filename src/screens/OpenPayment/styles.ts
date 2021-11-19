@@ -8,7 +8,7 @@ import { BorderlessButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
     flex: 1;
-    background-color: ${({ theme }) => theme.colors.background };
+    background-color: ${({ theme }) => theme.colors.background };    
 `;
 
 export const Body = styled.View`
@@ -25,30 +25,6 @@ export const Title = styled.Text`
     font-size: ${RFValue(18)}px;
 `;
 
-export const HeaderButtons = styled.View`
-    margin-top: 10px;
-    padding: 0 24px;
-    height: 195px;
-
-    justify-content: space-between;
-    align-content: flex-start;
-`;
-
-export const TitleProps = styled.View`
-    flex-direction: row;
-    justify-content: space-between;
-
-    align-items: center;
-     
-    margin-top: 20px;
-    margin-bottom: 10px;
-`;
-
-export const Icon = styled(Feather)`
-    color: ${({theme}) => theme.colors.text_dark};
-    font-size: ${RFValue(22)}px;
-`;
-
 export const MenuList = styled(FlatList).attrs({
     showsVerticalScrollIndicator: false,
     contentContainerStyle: {
@@ -56,6 +32,23 @@ export const MenuList = styled(FlatList).attrs({
     }
 })`
 
+`;
+
+export const Footer = styled.View`
+    width: 100%;
+
+    padding: 0 32px;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    margin-bottom: 15px;
+`;
+
+export const Value = styled.Text`
+    font-family: ${({ theme }) => theme.fonts.medium };
+    color: ${({ theme }) => theme.colors.text_dark };
+    font-size: ${RFValue(15)}px;
 `;
 
 export const MenuCard = styled.View`
@@ -74,12 +67,17 @@ export const Observations = styled.Text`
     margin-top: 2px;
 `;
 
+export const IconSelection = styled(Feather)`
+    color: ${({theme}) => theme.colors.success};
+    font-size: ${RFValue(25)}px; 
+    
+    margin-left: 5px;
+`;
 
-export const FooterMenuCard = styled.View`
-    flex-direction: row;
-    justify-content: space-between;
-
-    margin-top: 19px;
+export const IconUnselection = styled(Feather)`
+    color: ${({theme}) => theme.colors.attention};
+    font-size: ${RFValue(25)}px;
+    margin-right: 5px;
 `;
 
 export const TitleMenuCard = styled.Text`
@@ -92,8 +90,15 @@ export const Quantity = styled.Text`
     font-size: ${RFValue(18)}px;  
 `;
 
+export const FooterMenuCard = styled.View`
+    flex-direction: row;
+    justify-content: space-between;    
+
+    margin-top: 19px;
+`;
+
 export const ButtonDone = styled(RectButton)`
-    width: 45%;
+    width: 100%;
     height: 10px;
     background-color: ${({theme}) => theme.colors.success};
 
@@ -120,3 +125,18 @@ export const ButtonTitle = styled.Text`
 
     color: ${({theme}) => theme.colors.shape};
 `;  
+
+export const TitleProps = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+
+    align-items: center;
+     
+    margin-top: 20px;
+    margin-bottom: 10px;
+`;
+
+export const Icon = styled(Feather)`
+    color: ${({theme}) => theme.colors.text_dark};
+    font-size: ${RFValue(22)}px;
+`;

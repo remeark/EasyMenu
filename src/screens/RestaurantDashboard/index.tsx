@@ -3,6 +3,8 @@ import { TouchableOpacity } from 'react-native';
 import { useTheme } from 'styled-components';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
+import firebase from 'firebase';
+
 import { appFirebase, database } from '../../config/firebase';
 
 import { Button } from '../../components/Form/Button';
@@ -32,7 +34,11 @@ export function RestaurantDashboard(){
     const theme = useTheme();
 
     const navigation = useNavigation();
-    //const route = useRoute();    
+    //const route = useRoute();  
+    
+    function openPayments(){
+        navigation.navigate('OpenPayment');
+    }
     
     function registerProduct(){
         navigation.navigate('RegisterMenu');
@@ -42,16 +48,22 @@ export function RestaurantDashboard(){
         navigation.navigate('Editor');
     }
 
-    async function doneProduct({id, numPedido, table, value}){
-        await database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('finalizados').add({
-            id: numPedido,
-            mesa: table,
-            value: +value
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-        });
+    async function doneProduct({id, cardPayment, numPedido, table, value}){
 
+        if(!cardPayment){
+            await database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('finalizados').add({
+                id: numPedido,
+                mesa: table,
+                value: +value
+            }).then((doc) => {
+                addItensFinalized(id, doc.id, numPedido);
+    
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+            });
+        }
+        
         await database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('pedidos').doc(id)
         .delete()
         .catch((error) => {
@@ -59,6 +71,29 @@ export function RestaurantDashboard(){
         });
 
         getPedidos();
+    }
+
+    async function addItensFinalized(id, finalizedId, numPedido){
+
+        await database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('pedidos').doc(id).collection('item')
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                
+                database.collection("company").doc(appFirebase.auth().currentUser.uid).collection('finalizados').doc(finalizedId).collection('item').add({
+                    id: numPedido,
+                    item: doc.data().item,
+                    quantity: doc.data().quantity
+                })
+                .catch((error) => {
+                    console.error("Error adding itens: ", error);
+                });
+
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
     }
 
     async function cancelProduct({id}){
@@ -69,6 +104,18 @@ export function RestaurantDashboard(){
         });
 
         getPedidos();
+    }
+
+    function getQuantity(id, finalized){
+        let count = 0;
+
+        finalized.forEach(element => {
+            if(id === element){
+                count++;
+            }
+        }); 
+
+        return count;
     }
     
     async function getPedidos(){
@@ -85,7 +132,8 @@ export function RestaurantDashboard(){
                     numPedido: doc.data().id,
                     table: doc.data().mesa,
                     observations: doc.data().observations,
-                    value: doc.data().value,                    
+                    value: doc.data().value,
+                    cardPayment: doc.data().cardPayment                    
                 }]);
 
                 database.collection('company').doc(appFirebase.auth().currentUser.uid).collection('pedidos').doc(doc.id).collection('item')
@@ -94,6 +142,7 @@ export function RestaurantDashboard(){
                         querySnapshot.forEach((item) => {
                             setItens(itens => [...itens, {
                                 id: doc.id,
+                                idPedidoItem: item.data().id,
                                 name: item.data().item,
                                 quantity: Number(item.data().quantity)
                             }]);
@@ -124,6 +173,10 @@ export function RestaurantDashboard(){
 
                 <HeaderButtons>
                     <Button 
+                            title="Pagamentos em Aberto" 
+                            onPress={openPayments}
+                    />
+                    <Button 
                             title="Cadastrar Produtos" 
                             onPress={registerProduct}
                     />
@@ -153,13 +206,13 @@ export function RestaurantDashboard(){
 
                                 <Observations>
                                     {   
-                                        itens.map(itens => itens.id === item.id 
+                                        itens.map((itens) => itens.id === item.id 
                                             ? 
-                                            <Observations key={itens.name}> 
-                                                {itens.name.toUpperCase()} - Qtd: {itens.quantity} {'\n'}
+                                            <Observations key={itens.idPedidoItem + itens.name}> 
+                                                {itens.name.toUpperCase()} - Qtd: {itens.quantity} - {itens.idPedidoItem} {'\n'}
                                             </Observations> 
                                             : 
-                                            <Observations/>)
+                                            <Observations key={itens.idPedidoItem + itens.name}/>)
                                     }                                    
                                 </Observations>
 
@@ -180,7 +233,7 @@ export function RestaurantDashboard(){
                                 </FooterMenuCard>
                             </MenuCard>
                             }
-                        />
+                    />
                 </Body>
 
         </Container>

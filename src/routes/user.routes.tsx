@@ -17,6 +17,7 @@ import { SelectWay } from '../screens/SelectWay';
 import { SignIn } from '../screens/SignIn';
 import { UserRegister } from '../screens/UserRegister';
 import { Register } from '../screens/Register';
+import { OpenPayment } from '../screens/OpenPayment';
 
 
 const { Navigator, Screen } = createStackNavigator();
@@ -73,7 +74,11 @@ export function UserRoutes(){
             <Screen 
                 name="RestaurantDashboard"
                 component={RestaurantDashboard}
-            />   
+            />  
+            <Screen
+                name="OpenPayment"
+                component={OpenPayment}
+            /> 
             <Screen 
                 name="RegisterMenu"
                 component={RegisterMenu}

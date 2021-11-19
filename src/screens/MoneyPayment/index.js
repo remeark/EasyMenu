@@ -36,9 +36,10 @@ export function MoneyPayment(){
             id: idPedido,
             mesa: route.params.table,
             observations: route.params.observations,
-            value: +route.params.total
+            value: +route.params.total,
+            cardPayment: false
         }).then((doc) => {
-            addItens(doc.id);
+            addItens(doc.id, idPedido);
 
             navigation.navigate('PedidoApproved', {
                 idPedido: idPedido,
@@ -52,7 +53,7 @@ export function MoneyPayment(){
         });        
     }
 
-    function addItens(id){
+    function addItens(id, idPedido){
 
         database.collection('company').doc(route.params.idRestaurant).collection('cardapio').where(firebase.firestore.FieldPath.documentId(), 'in', route.params.itens)
         .get()
@@ -60,6 +61,7 @@ export function MoneyPayment(){
             querySnapshot.forEach((doc) => {
                 
                 database.collection("company").doc(route.params.idRestaurant).collection('pedidos').doc(id).collection('item').add({
+                    id: idPedido,
                     item: doc.data().text,
                     quantity: getQuantity(doc.id)
                 })
