@@ -136,7 +136,7 @@ export function Menu(){
                 <Title>Cardápio </Title>
                     
                 <MenuList 
-                    data={cardapio}
+                    data={cardapio.sort((a, b) => a.text > b.text)}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) =>
                     <MenuCard style={

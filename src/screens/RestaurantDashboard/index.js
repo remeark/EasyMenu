@@ -209,7 +209,7 @@ export function RestaurantDashboard(){
                                         itens.map((itens) => itens.id === item.id 
                                             ? 
                                             <Observations key={itens.idPedidoItem + itens.name}> 
-                                                {itens.name.toUpperCase()} - Qtd: {itens.quantity} - {itens.idPedidoItem} {'\n'}
+                                                {itens.name.toUpperCase()} - Qtd: {itens.quantity} {'\n'}
                                             </Observations> 
                                             : 
                                             <Observations key={itens.idPedidoItem + itens.name}/>)

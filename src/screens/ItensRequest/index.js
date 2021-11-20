@@ -108,11 +108,11 @@ export function ItensRequest(){
                     <Title>Itens do Pedido</Title> 
 
                     <MenuList 
-                        data={cardapio}
+                        data={cardapio.sort((a, b) => a.text > b.text)}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) =>
                         <MenuCard>
-                            <TitleData>{item.text} - R$ {item.value * item.quantity}</TitleData>
+                            <TitleData>{item.text} - {(item.value * item.quantity).toLocaleString('pt-BR', { style: 'currency',currency: 'BRL'})}</TitleData>
                             <TitleData>Quantidade: {item.quantity} </TitleData>
                         </MenuCard>
                         }

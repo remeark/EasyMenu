@@ -30,8 +30,6 @@ export function SignIn(){
     const [errorLogin, setErrorLogin] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const [userType, setUserType] = useState('');
-
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -40,7 +38,7 @@ export function SignIn(){
     function Login(){
         setIsLoading(true);
         
-        appFirebase.auth().signInWithEmailAndPassword(email, password)
+        appFirebase.auth().signInWithEmailAndPassword(email.trim(), password.trim())
         .then((userCredential) => {
             var user = userCredential.user;
             
@@ -64,9 +62,7 @@ export function SignIn(){
                 console.log(error);
             }
         })
-        .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;  
+        .catch((error) => { 
             console.log(error);
             
             setErrorLogin(true);
