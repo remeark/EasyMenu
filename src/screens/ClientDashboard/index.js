@@ -42,7 +42,7 @@ export function ClientDashboard(){
 
     function scanRequest(){
 
-        //navigation.navigate('Menu', { restaurant: 'peninha@gmail.com', table: '4' });
+        navigation.navigate('Menu', { restaurant: 'peninha@gmail.com', table: '30' });
 
         setScan(true);
         setScanned(false);
