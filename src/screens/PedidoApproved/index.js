@@ -14,8 +14,6 @@ import {
 
 export function PedidoApproved(){
 
-    const theme = useTheme();
-
     const navigation = useNavigation();
     const route = useRoute();    
     

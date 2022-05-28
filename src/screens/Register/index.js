@@ -3,6 +3,7 @@ import {
     Keyboard, 
     TouchableWithoutFeedback,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { appFirebase, database } from '../../config/firebase';
 import { useNavigation } from '@react-navigation/native';
@@ -61,82 +62,84 @@ export function Register(){
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>     
-            <Container>  
-                
-                <Header>
-                    <Title>Cadastro Empresa</Title>
-                </Header>
-                
-                <Form>
-                    <Fields>
-                        <Input
-                            name="Nome"
-                            placeholder="Nome"
-                            autoCapitalize="none"
-                            value={name}
-                            onChangeText={(name) => setName(name)}
-                        />
-                        
-                        <Input 
-                            name="cpnj"
-                            placeholder="CNPJ"
-                            value={CNPJ}
-                            onChangeText={(cnpj) => setCNPJ(cnpj)}
-                        />
+        <KeyboardAwareScrollView>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>     
+                <Container>  
+                    
+                    <Header>
+                        <Title>Cadastro Empresa</Title>
+                    </Header>
+                    
+                    <Form>
+                        <Fields>
+                            <Input
+                                name="Nome"
+                                placeholder="Nome"
+                                autoCapitalize="none"
+                                value={name}
+                                onChangeText={(name) => setName(name)}
+                            />
+                            
+                            <Input 
+                                name="cpnj"
+                                placeholder="CNPJ"
+                                value={CNPJ}
+                                onChangeText={(cnpj) => setCNPJ(cnpj)}
+                            />
 
-                        <Input 
-                            name="endereco"
-                            placeholder="Endereço"
-                            value={address}
-                            onChangeText={(address) => setAddress(address)}
+                            <Input 
+                                name="endereco"
+                                placeholder="Endereço"
+                                value={address}
+                                onChangeText={(address) => setAddress(address)}
+                            />
+
+                            <Input 
+                                name="fixo"
+                                placeholder="Telefone Fixo"
+                                value={telephone}
+                                onChangeText={(telephone) => setTelephone(telephone)}
+                            />
+
+                            <Input 
+                                name="celular"
+                                placeholder="Celular"
+                                value={cellphone}
+                                onChangeText={(cellphone) => setCellphone(cellphone)}
+                            />
+                            
+                            <Input 
+                                name="email"
+                                placeholder="E-mail"
+                                value={email}
+                                onChangeText={(email) => setEmail(email)}
+                            />
+
+                            <Input 
+                                name="password"
+                                placeholder="Senha"
+                                secureTextEntry={true}
+                                value={password}
+                                onChangeText={(password) => setPassword(password)}
+                            />              
+
+                            { errorRegister === true ?
+                            <ErrorRegister>
+                                <ErrorRegisterText>Erro ao registrar-se.</ErrorRegisterText>
+                            </ErrorRegister>
+                            :
+                            <ErrorRegister />                  
+                            }               
+                                    
+                        </Fields>
+
+                        <Button 
+                            title="Registrar" 
+                            onPress={Register}
                         />
-
-                        <Input 
-                            name="fixo"
-                            placeholder="Telefone Fixo"
-                            value={telephone}
-                            onChangeText={(telephone) => setTelephone(telephone)}
-                        />
-
-                        <Input 
-                            name="celular"
-                            placeholder="Celular"
-                            value={cellphone}
-                            onChangeText={(cellphone) => setCellphone(cellphone)}
-                        />
-                        
-                        <Input 
-                            name="email"
-                            placeholder="E-mail"
-                            value={email}
-                            onChangeText={(email) => setEmail(email)}
-                        />
-
-                        <Input 
-                            name="password"
-                            placeholder="Senha"
-                            secureTextEntry={true}
-                            value={password}
-                            onChangeText={(password) => setPassword(password)}
-                        />              
-
-                        { errorRegister === true ?
-                        <ErrorRegister>
-                            <ErrorRegisterText>Erro ao registrar-se.</ErrorRegisterText>
-                        </ErrorRegister>
-                        :
-                        <ErrorRegister />                  
-                        }               
-                                
-                    </Fields>
-
-                    <Button 
-                        title="Registrar" 
-                        onPress={Register}
-                    />
-                </Form>
-            </Container>
-        </TouchableWithoutFeedback>        
+                    </Form>
+                </Container>
+            </TouchableWithoutFeedback>  
+        </KeyboardAwareScrollView>      
     )
 };
