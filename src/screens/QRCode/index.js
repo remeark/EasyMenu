@@ -87,10 +87,10 @@ export function QRCodeGenerator(){
                         <FormQrCode>                        
                             <QRCode
                                 value={"email=" + email + "?mesa=" + table}
-                                size={250}
+                                size={300}
                                 getRef={(c) => (setSvg(c))}
                             />
-                            <Title onPress={getSvgPath}>Salvar</Title>
+                            {/* <Title onPress={getSvgPath}>Salvar</Title> */}
                         </FormQrCode>
                     }
                     

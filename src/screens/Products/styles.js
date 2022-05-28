@@ -24,3 +24,10 @@ export const Body = styled.View`
     padding: 0 24px;
 
 `;
+
+export const Title = styled.Text`
+    font-family: ${({theme}) => theme.fonts.regular};
+    font-size: ${RFValue(18)}px;    
+    margin-top: 15px;
+    margin-left: 20px;
+`;

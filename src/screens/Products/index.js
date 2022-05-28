@@ -13,6 +13,7 @@ import { Loading } from '../../components/Loading';
 import { 
     Container, 
     Body,
+    Title
 } from './styles';
 
 export function Products(){
@@ -35,6 +36,7 @@ export function Products(){
     return(
         <Container>              
                 <Header isCompany={true}/>
+                <Title>Produtos</Title>
                 <Body>
                     <Button 
                             title="Cadastrar Produtos" 
