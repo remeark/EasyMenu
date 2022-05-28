@@ -221,14 +221,12 @@ export function RestaurantDashboard(){
                                 <FooterMenuCard>
                                     <ButtonDone
                                         onPress={() => doneProduct(item)}
-                                        sty
                                     >   
                                         <ButtonTitle>Finalizar</ButtonTitle>
                                     </ButtonDone>
 
                                     <ButtonUndone
                                         onPress={() => cancelProduct(item)}
-                                        label="Cancelar"
                                     >   
                                         <ButtonTitle>Cancelar</ButtonTitle>
                                     </ButtonUndone>    
