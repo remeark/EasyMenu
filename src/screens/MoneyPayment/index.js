@@ -92,16 +92,6 @@ export function MoneyPayment(){
         navigation.goBack();
     }
 
-    // useFocusEffect(useCallback(() => {
-    //     const user = appFirebase.auth().currentUser;
-
-    //     if (user) {
-    //         console.log("logado");
-    //     } else {
-    //         console.log("na ologado");
-    //     }
-    // }, []));
-
     return(
         <Container>                 
                 <Header isCompany={false}/>

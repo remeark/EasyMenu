@@ -15,13 +15,13 @@ app.listen(port, () => {
     console.log(`Server up at http://localhost:${port}`);
 });
 
-app.post("/create-payment-intent", async (req, res) => {
+app.post("/create-payment-intent/:amount", async (req, res) => {
+    var amount = parseFloat(req.params.amount).toFixed(2);
     try{
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: 1099,
+            amount: amount.replace('.', ''),
             currency: "brl",
-            payment_method_types: ["card"], // by default
-
+            payment_method_types: ["card"], // by default   
         });
 
         const clientSecret = paymentIntent.client_secret;

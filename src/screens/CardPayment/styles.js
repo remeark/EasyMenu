@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
-import { FlatList } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { RectButton } from 'react-native-gesture-handler';
 
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { BorderlessButton } from 'react-native-gesture-handler';
@@ -35,9 +34,7 @@ export const TitleData = styled.Text`
 
 export const Footer = styled.View`
     width: 100%;
-
-    padding: 0 32px;
-
+    
     align-items: center;
     justify-content: flex-end;
 
@@ -68,6 +65,39 @@ export const ErrorRegisterText = styled.Text`
     font-family:${({theme}) => theme.fonts.regular};
     color: ${({theme}) => theme.colors.attention};
 `;
+
+export const Buttons = styled.View`
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+export const ButtonDone = styled(RectButton)`
+    width: 48%;
+    background-color: ${({theme}) => theme.colors.success};
+
+    padding:18px;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const ButtonUndone = styled(RectButton)`
+    width: 48%;
+    background-color: ${({theme}) => theme.colors.attention};
+
+    padding:18px;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const ButtonTitle = styled.Text`
+    font-family: ${({theme}) => theme.fonts.medium};
+    font-size: ${RFValue(14)}px;
+
+    color: ${({theme}) => theme.colors.shape};
+`;  
 
 
 

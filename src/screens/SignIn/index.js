@@ -47,7 +47,7 @@ export function SignIn(){
             try {
                 if(route.params.isCompany) {
                     database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
-                        if(doc.data().cnpj){
+                        if(doc.data()?.cnpj){
                             navigation.navigate('RestaurantDashboard', { isCompany: route.params.isCompany })
                         }                        
                     });
@@ -75,7 +75,7 @@ export function SignIn(){
                 try {
                     if ( route.params.isCompany ) {
                         database.collection('company').doc(appFirebase.auth().currentUser.uid).get().then(doc => {
-                            if(doc.data().cnpj){
+                            if(doc.data()?.cnpj){
                                 navigation.navigate('RestaurantDashboard', { isCompany: route.params.isCompany, email: email })
                             }                        
                         });

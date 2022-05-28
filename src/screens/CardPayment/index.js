@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { StripeProvider, CardField, useConfirmPayment } from '@stripe/stripe-react-native';
 import { useTheme } from 'styled-components';
-import { Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RadioButton } from 'react-native-paper';
 
-import { appFirebase } from '../../config/firebase';
+import firebase from 'firebase';
+import { database } from '../../config/firebase';
 
 import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
@@ -20,7 +21,11 @@ import {
     TitleData,
     Form,
     Fields,
-    Footer
+    Footer,
+    ButtonDone,
+    ButtonUndone,
+    Buttons,
+    ButtonTitle
 } from './styles';
 
 const API_URL = "http://192.168.100.22:3000";
@@ -30,16 +35,13 @@ export function CardPayment(){
     const [email, setEmail] = useState();
     const [cardDetails, setCardDetails] = useState();
     const {confirmPayment, loading} = useConfirmPayment();
-    const [value, setValue] = React.useState('first');
+    const [value, setValue] = React.useState('credit');
     const theme = useTheme();
     const navigation = useNavigation();
     const route = useRoute();
 
-    const fetchPaymentIntentClientSecret = async () => {
-        const params = {
-            amount: route.params.total
-        }
-        const response = await fetch(`${API_URL}/create-payment-intent`, {
+    const fetchPaymentIntentClientSecret = async () => {      
+        const response = await fetch(`${API_URL}/create-payment-intent/${route.params.total}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -55,6 +57,7 @@ export function CardPayment(){
             Alert.alert("Por favor, insira o e-mail e o número do cartão.");
             return;
         }
+
         const billingDetails = {
             email: email,
         }
@@ -63,6 +66,7 @@ export function CardPayment(){
             const {clientSecret, error} = await fetchPaymentIntentClientSecret();
             
             if(error){
+                console.log(error);
                 console.log("Não foi possível realizar o pagamento.");
             } else {
                 const { paymentIntent, error } = await confirmPayment(clientSecret, {
@@ -71,15 +75,81 @@ export function CardPayment(){
                 });
 
                 if(error){
-                    Alert.alert(`Pagamento não confirmado ${error.message}`);
+                    Alert.alert(`Pagamento não confirmado.`);
                 } else if(paymentIntent){
                     Alert.alert("Pagamento realizado!");
                     console.log("Pagamento realizado ", paymentIntent);
+                    finalize();
                 }
             }
         } catch (e){
             console.log(e);
         }
+    }
+
+    function finalize(){         
+        
+        let date = new Date();
+        let idPedido = date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString();
+
+        database.collection("company").doc(route.params.idRestaurant).collection('pedidos').add({
+            id: idPedido,
+            mesa: route.params.table,
+            observations: route.params.observations,
+            value: +route.params.total,
+            cardPayment: false
+        }).then((doc) => {
+            addItens(doc.id, idPedido);
+
+            navigation.navigate('PedidoApproved', {
+                idPedido: idPedido,
+                table: route.params.table,
+                restaurantName: route.params.restaurantName
+            });
+
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });        
+    }
+
+    function addItens(id, idPedido){
+
+        database.collection('company').doc(route.params.idRestaurant).collection('cardapio').where(firebase.firestore.FieldPath.documentId(), 'in', route.params.itens)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                
+                database.collection("company").doc(route.params.idRestaurant).collection('pedidos').doc(id).collection('item').add({
+                    id: idPedido,
+                    item: doc.data().text,
+                    quantity: getQuantity(doc.id)
+                })
+                .catch((error) => {
+                    console.error("Error adding itens: ", error);
+                });
+
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });  
+    }
+
+    function getQuantity(id){
+        let count = 0;
+
+        route.params.itens.forEach(element => {
+            if(id === element){
+                count++;
+            }
+        }); 
+
+        return count;
+    }
+
+    function cancel(){
+        navigation.goBack();
     }
 
     return(
@@ -119,24 +189,27 @@ export function CardPayment(){
                                     setCardDetails(cardDetails);
                                 }}
                             />
+
+                            <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
+                                <RadioButton.Item label="Crédito" value="credit"/>
+                                {/* <RadioButton.Item label="Débito" value="debit"/>                             */}
+                            </RadioButton.Group>
                                     
                         </Fields>
-
-                        <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
-                            <RadioButton.Item label="Débito" value="debito"/>
-                            <RadioButton.Item label="Crédito" value="credito"/>
-                        </RadioButton.Group>
 
                         <Footer>
 
                             <Value>Valor do Pedido: {route.params.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                             </Value>
 
-                            <Button 
-                                    title="Efetuar Pagamento" 
-                                    onPress={handlePayment}
-                                    disabled={loading}
-                            />
+                            <Buttons> 
+                                <ButtonDone onPress={handlePayment}>
+                                    <ButtonTitle>Finalizar</ButtonTitle>
+                                </ButtonDone>
+                                <ButtonUndone onPress={cancel}>
+                                    <ButtonTitle>Cancelar</ButtonTitle>
+                                </ButtonUndone>
+                            </Buttons>
                         </Footer>
                     </Form>                 
                 </Body>    
