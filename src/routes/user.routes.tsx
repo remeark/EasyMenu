@@ -12,12 +12,14 @@ import { RestaurantDashboard } from '../screens/RestaurantDashboard';
 import { RegisterMenu } from '../screens/RegisterMenu';
 import { EditorMenu } from '../screens/EditorMenu';
 import { Editor } from '../screens/Editor';
+import { QRCodeGenerator } from '../screens/QRCode';
 
 import { SelectWay } from '../screens/SelectWay';
 import { SignIn } from '../screens/SignIn';
 import { UserRegister } from '../screens/UserRegister';
 import { Register } from '../screens/Register';
 import { OpenPayment } from '../screens/OpenPayment';
+import { Products } from '../screens/Products';
 
 
 const { Navigator, Screen } = createStackNavigator();
@@ -75,6 +77,14 @@ export function UserRoutes(){
                 name="RestaurantDashboard"
                 component={RestaurantDashboard}
             />  
+            <Screen 
+                name="Products"
+                component={Products}
+            /> 
+            <Screen 
+                name="QRCodeGenerator"
+                component={QRCodeGenerator}
+            />
             <Screen
                 name="OpenPayment"
                 component={OpenPayment}

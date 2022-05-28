@@ -99,10 +99,9 @@ export const FooterMenuCard = styled.View`
 
 export const ButtonDone = styled(RectButton)`
     width: 100%;
-    height: 10px;
+    height: 35px;
     background-color: ${({theme}) => theme.colors.success};
 
-    padding:18px;
     border-radius: 5px;
     align-items: center;
     justify-content: center;

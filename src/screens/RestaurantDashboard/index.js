@@ -38,15 +38,15 @@ export function RestaurantDashboard(){
     
     function openPayments(){
         navigation.navigate('OpenPayment');
-    }
+    } 
     
-    function registerProduct(){
-        navigation.navigate('RegisterMenu');
-    }
+    function products(){
+        navigation.navigate('Products');
+    } 
 
-    function editorProduct(){
-        navigation.navigate('Editor');
-    }
+    function qrCode(){
+        navigation.navigate('QRCodeGenerator');
+    } 
 
     async function doneProduct({id, cardPayment, numPedido, table, value}){
 
@@ -177,12 +177,12 @@ export function RestaurantDashboard(){
                             onPress={openPayments}
                     />
                     <Button 
-                            title="Cadastrar Produtos" 
-                            onPress={registerProduct}
+                            title="Produtos" 
+                            onPress={products}
                     />
                     <Button 
-                            title="Editar Produtos" 
-                            onPress={editorProduct}
+                            title="QR Code" 
+                            onPress={qrCode}
                     />
                 </HeaderButtons>
 
@@ -221,12 +221,14 @@ export function RestaurantDashboard(){
                                 <FooterMenuCard>
                                     <ButtonDone
                                         onPress={() => doneProduct(item)}
+                                        sty
                                     >   
                                         <ButtonTitle>Finalizar</ButtonTitle>
                                     </ButtonDone>
 
                                     <ButtonUndone
                                         onPress={() => cancelProduct(item)}
+                                        label="Cancelar"
                                     >   
                                         <ButtonTitle>Cancelar</ButtonTitle>
                                     </ButtonUndone>    
