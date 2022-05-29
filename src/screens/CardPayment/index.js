@@ -58,8 +58,10 @@ export function CardPayment(){
         }
 
         const billingDetails = {
-            email: email,
+            email: email.trim(),
         }
+
+        console.log(billingDetails);
 
         try {
             const {clientSecret, error} = await fetchPaymentIntentClientSecret();

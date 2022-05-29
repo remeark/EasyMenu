@@ -40,11 +40,11 @@ export function Register(){
 
             database.collection('company').doc(user.uid).set({
               name: name,
-              cnpj: CNPJ,
+              cnpj: CNPJ.trim(),
               address: address,
               cellphone: cellphone,
               telephone: telephone,
-              email: email
+              email: email.trim()
             })
             .catch((error) => {
               console.error("Error writing document: ", error);

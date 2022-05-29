@@ -22,7 +22,6 @@ export function ClientDashboard(){
     const theme = useTheme();
 
     const navigation = useNavigation();
-    //const route = useRoute();    
     
     function QRCode(){
         navigation.navigate('Menu', { dados: data });
@@ -42,7 +41,7 @@ export function ClientDashboard(){
 
     function scanRequest(){
 
-        navigation.navigate('Menu', { restaurant: 'peninha@gmail.com', table: '30' });
+        //navigation.navigate('Menu', { restaurant: 'peninha@gmail.com', table: '30' });
 
         setScan(true);
         setScanned(false);

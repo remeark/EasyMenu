@@ -30,14 +30,14 @@ export function UserRegister(){
     const navigation = useNavigation();
 
     function Register(){
-        appFirebase.auth().createUserWithEmailAndPassword(email, password)
+        appFirebase.auth().createUserWithEmailAndPassword(email.trim(), password.trim())
         .then((userCredential) => {
           var user = userCredential.user;
 
           database.collection("users").doc(user.uid).set({
             name: name,
             lastName: lastName,
-            email: email
+            email: email.trim()
           })
           .catch((error) => {
             console.error("Error writing document: ", error);
@@ -49,7 +49,7 @@ export function UserRegister(){
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
-          // ..
+
           console.log(errorMessage);
           setErrorRegister(true);
         });      
