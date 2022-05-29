@@ -102,7 +102,7 @@ export function CardPayment(){
             mesa: route.params.table,
             observations: route.params.observations,
             value: +route.params.total,
-            cardPayment: false
+            cardPayment: true
         }).then((doc) => {
             addItens(doc.id, idPedido);
 
