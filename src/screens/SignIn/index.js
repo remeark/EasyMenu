@@ -21,7 +21,8 @@ import {
     ButtonLogin,
     ErrorLoginText,
     ErrorLogin,
-    RegisterText
+    RegisterText,
+    ErrorText
 } from './styles';
 
 export function SignIn(){
@@ -131,7 +132,10 @@ export function SignIn(){
                         secureTextEntry={true}
                         value={password}
                         onChangeText={(password) => setPassword(password)}
-                    />    
+                    />      
+                </FooterWrapper>
+
+                <ErrorText>
                     { errorLogin === true ?
                         <ErrorLogin>
                             <ErrorLoginText>O e-mail ou a senha estão incorretos.</ErrorLoginText>
@@ -142,9 +146,8 @@ export function SignIn(){
                             color={theme.colors.shape}
                             style={{marginTop: 18}}                    
                         />                    
-                    }               
-
-                </FooterWrapper>
+                    } 
+                </ErrorText>
 
                 <ButtonLogin> 
                     <Button 

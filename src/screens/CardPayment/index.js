@@ -12,6 +12,7 @@ import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 import { HeaderRestaurant } from '../../components/HeaderRestaurant';
+import {Loading} from '../../components/Loading';
 
 import { 
     Container, 
@@ -31,6 +32,7 @@ import {
 const API_URL = "https://us-central1-easymenu-befe0.cloudfunctions.net/api";
 
 export function CardPayment(){
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState();
     const [cardDetails, setCardDetails] = useState();
     const {confirmPayment, loading} = useConfirmPayment();
@@ -52,6 +54,8 @@ export function CardPayment(){
     }
     
     const handlePayment = async () => {
+        setIsLoading(true);
+
         if(!cardDetails?.complete || !email){
             Alert.alert("Por favor, insira o e-mail e o número do cartão.");
             return;
@@ -60,8 +64,6 @@ export function CardPayment(){
         const billingDetails = {
             email: email.trim(),
         }
-
-        console.log(billingDetails);
 
         try {
             const {clientSecret, error} = await fetchPaymentIntentClientSecret();
@@ -86,6 +88,8 @@ export function CardPayment(){
         } catch (e){
             console.log(e);
         }
+
+        setIsLoading(false);
     }
 
     function finalize(){         
@@ -203,14 +207,21 @@ export function CardPayment(){
                             <Value>Valor do Pedido: {route.params.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                             </Value>
 
-                            <Buttons> 
-                                <ButtonDone onPress={handlePayment} disabled={loading}>
-                                    <ButtonTitle>Finalizar</ButtonTitle>
-                                </ButtonDone>
-                                <ButtonUndone onPress={cancel} disabled={loading}>
-                                    <ButtonTitle>Cancelar</ButtonTitle>
-                                </ButtonUndone>
-                            </Buttons>
+                            {
+                                isLoading ? 
+                                <Loading />             
+                                : 
+                                <>
+                                <Buttons> 
+                                    <ButtonDone onPress={handlePayment}>
+                                        <ButtonTitle>Finalizar</ButtonTitle>
+                                    </ButtonDone>
+                                    <ButtonUndone onPress={cancel}>
+                                        <ButtonTitle>Cancelar</ButtonTitle>
+                                    </ButtonUndone>
+                                </Buttons>
+                                </>
+                            }
                         </Footer>
                     </Form>                 
                 </Body>    

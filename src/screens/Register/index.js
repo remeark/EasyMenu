@@ -30,11 +30,19 @@ export function Register(){
     const [password, setPassword] = useState('');
 
     const [errorRegister, setErrorRegister] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const navigation = useNavigation();
 
     function Register(){
-        appFirebase.auth().createUserWithEmailAndPassword(email, password)
+        if(!name || !CNPJ || !cellphone || !telephone){
+            setErrorRegister(true);
+            setErrorMessage("Você deve preencher todos os campos.");
+
+            return;
+        }
+
+        appFirebase.auth().createUserWithEmailAndPassword(email.trim(), password.trim())
         .then((userCredential) => {
             var user = userCredential.user;
 
@@ -56,7 +64,13 @@ export function Register(){
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
-          // ..
+
+          if(errorCode === "auth/invalid-email"){
+            setErrorMessage("O e-mail não está correto.");
+          } else {
+            setErrorMessage("A senha deve ter pelo menos 6 caracteres.");
+          }
+
           setErrorRegister(true);
         });      
     }
@@ -123,9 +137,9 @@ export function Register(){
                                 onChangeText={(password) => setPassword(password)}
                             />              
 
-                            { errorRegister === true ?
+                            { errorRegister ?
                             <ErrorRegister>
-                                <ErrorRegisterText>Erro ao registrar-se.</ErrorRegisterText>
+                                <ErrorRegisterText>{errorMessage}</ErrorRegisterText>
                             </ErrorRegister>
                             :
                             <ErrorRegister />                  

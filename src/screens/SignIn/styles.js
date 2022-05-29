@@ -66,6 +66,11 @@ export const ErrorLogin = styled.View`
     flex: 1;
 `;
 
+export const ErrorText = styled.View`
+    height: 15px;
+    align-items: center;
+`;
+
 export const ErrorLoginText = styled.Text`
     font-family:${({theme}) => theme.fonts.regular};
     color: ${({theme}) => theme.colors.attention};

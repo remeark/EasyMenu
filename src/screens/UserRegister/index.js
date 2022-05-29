@@ -24,12 +24,19 @@ export function UserRegister(){
     const [email, setEmail] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const [errorRegister, setErrorRegister] = useState(false);
+    const [errorRegister, setErrorRegister] = useState(true);
 
     const navigation = useNavigation();
 
     function Register(){
+        if(!name || !lastName){
+            setErrorRegister(true);
+            setErrorMessage("Você deve preencher nome e sobrenome.");
+
+            return;
+        }
         appFirebase.auth().createUserWithEmailAndPassword(email.trim(), password.trim())
         .then((userCredential) => {
           var user = userCredential.user;
@@ -46,12 +53,17 @@ export function UserRegister(){
           setErrorRegister(false);
           navigation.navigate("SignIn", { isCompany: false });
         })
-        .catch((error) => {
+        .catch((error) => {          
           var errorCode = error.code;
           var errorMessage = error.message;
-
-          console.log(errorMessage);
-          setErrorRegister(true);
+          
+          if(errorCode === "auth/invalid-email"){
+              setErrorMessage("O e-mail não está correto.");
+          } else {
+              setErrorMessage("A senha deve ter pelo menos 6 caracteres.");
+          }
+        
+          setErrorRegister(true);          
         });      
     }
 
@@ -95,17 +107,17 @@ export function UserRegister(){
                             secureTextEntry={true}
                             value={password}
                             onChangeText={(password) => setPassword(password)}
-                        />     
+                        />   
 
-                        { errorRegister === true ?
+                    </Fields>
+
+                    { errorRegister ?
                         <ErrorRegister>
-                            <ErrorRegisterText>Erro ao registrar-se.</ErrorRegisterText>
+                            <ErrorRegisterText>{errorMessage}</ErrorRegisterText>
                         </ErrorRegister>
                         :
                         <ErrorRegister />                  
-                        }               
-                                
-                    </Fields>
+                    }     
 
                     <Button 
                         title="Registrar" 
