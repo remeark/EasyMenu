@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import {Text, StyleSheet} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import {Text, StyleSheet, Alert} from 'react-native';
 import { useTheme } from 'styled-components';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { appFirebase, database } from '../../config/firebase';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Camera } from 'expo-camera';
 
 import { Button } from '../../components/Form/Button';
 import { Header } from '../../components/Header';
@@ -35,24 +36,38 @@ export function ClientDashboard(){
         // A partir do 6 caractere do email e a partir do 6 caractere a mesa
         const email   = dados.substring(6, dados.lastIndexOf("?"));
         const mesa = dados.substring(dados.lastIndexOf("?") + 6);
-        
-        navigation.navigate('Menu', { restaurant: email, table: mesa });
+
+        if(dados === "email=" + email + "?mesa=" + mesa){
+            navigation.navigate('Menu', { restaurant: email, table: mesa });
+        }
+        else{
+            Alert.alert("QR Code inválido!");
+            setScan(false);
+            setScanned(false);
+        }
     };   
 
     function scanRequest(){
-
         //navigation.navigate('Menu', { restaurant: 'peninha@gmail.com', table: '30' });
 
         setScan(true);
         setScanned(false);
     }
 
-    useEffect(() => {
+    function requestPermission(){
         (async () => {
-        const { status } = await BarCodeScanner.requestPermissionsAsync();
-        setHasPermission(status === 'granted');
-        })();
+            const { status } = await Camera.requestCameraPermissionsAsync();
+            setHasPermission(status === 'granted');
+            })();
+    };
+
+    useEffect(() => {
+        requestPermission();
     }, []);
+
+    // useFocusEffect(useCallback(() => {
+    //     requestPermission();
+    // }, []));
 
     if (hasPermission === null) {
         return <Text>Solicitando permissão da câmera</Text>;
@@ -67,7 +82,7 @@ export function ClientDashboard(){
 
                 <Body> 
                     {scan ?
-                        <BarCodeScanner
+                        <Camera
                             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                             style={StyleSheet.absoluteFillObject}
                         /> :

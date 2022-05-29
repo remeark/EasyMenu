@@ -21,13 +21,14 @@ import {
 } from './styles';
 
 export function MoneyPayment(){
-
+    const [isLoading, setIsLoading] = useState(false);
     const theme = useTheme();
 
     const navigation = useNavigation();
     const route = useRoute();
 
     function finalize(){         
+        setIsLoading(true);
         
         let date = new Date();
         let idPedido = date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString();
@@ -51,6 +52,8 @@ export function MoneyPayment(){
         .catch((error) => {
             console.error("Error adding document: ", error);
         });        
+
+        setIsLoading(false);
     }
 
     function addItens(id, idPedido){
@@ -104,14 +107,21 @@ export function MoneyPayment(){
                 <Body> 
                     <Title>Finalizar Pedido</Title>
                     <Title>Valor Total: {route.params.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Title>
-                    <Buttons> 
-                        <ButtonDone onPress={finalize}>
-                            <ButtonTitle>Finalizar</ButtonTitle>
-                        </ButtonDone>
-                        <ButtonUndone onPress={cancel}>
-                            <ButtonTitle>Cancelar</ButtonTitle>
-                        </ButtonUndone>
-                    </Buttons>
+                    {
+                        isLoading ? 
+                        <Loading />             
+                        : 
+                        <>
+                        <Buttons> 
+                            <ButtonDone onPress={finalize}>
+                                <ButtonTitle>Finalizar</ButtonTitle>
+                            </ButtonDone>
+                            <ButtonUndone onPress={cancel}>
+                                <ButtonTitle>Cancelar</ButtonTitle>
+                            </ButtonUndone>
+                        </Buttons>
+                        </> 
+                    }
                 </Body>
 
         </Container>
