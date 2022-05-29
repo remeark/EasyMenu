@@ -35,7 +35,7 @@ export function RegisterMenu(){
             observations: productIngredients,
             value: +productValue
         }).then(() => {
-            navigation.navigate('RestaurantDashboard');
+            navigation.navigate('Products');
         })
         .catch((error) => {
             console.error("Error adding document: ", error);
