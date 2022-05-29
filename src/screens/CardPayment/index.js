@@ -28,10 +28,9 @@ import {
     ButtonTitle
 } from './styles';
 
-const API_URL = "http://192.168.100.22:3000";
+const API_URL = "https://us-central1-easymenu-befe0.cloudfunctions.net/api";
 
 export function CardPayment(){
-    const [selectItem, setSelectItem] = useState([]);
     const [email, setEmail] = useState();
     const [cardDetails, setCardDetails] = useState();
     const {confirmPayment, loading} = useConfirmPayment();
@@ -203,10 +202,10 @@ export function CardPayment(){
                             </Value>
 
                             <Buttons> 
-                                <ButtonDone onPress={handlePayment}>
+                                <ButtonDone onPress={handlePayment} disabled={loading}>
                                     <ButtonTitle>Finalizar</ButtonTitle>
                                 </ButtonDone>
-                                <ButtonUndone onPress={cancel}>
+                                <ButtonUndone onPress={cancel} disabled={loading}>
                                     <ButtonTitle>Cancelar</ButtonTitle>
                                 </ButtonUndone>
                             </Buttons>

@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "easymenu",
+    "name": "EasyMenu",
     "slug": "easymenu",
     "scheme": "easymenu",
     "version": "1.0.0",
     "orientation": "portrait",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "description": "EasyMenu - Marinho Kraemer de Almeida"
   },
   "name": "easymenu"
 }
