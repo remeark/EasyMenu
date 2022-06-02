@@ -3,7 +3,7 @@
     "name": "EasyMenu",
     "slug": "easymenu",
     "scheme": "easymenu",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "assetBundlePatterns": [
       "**/*"
