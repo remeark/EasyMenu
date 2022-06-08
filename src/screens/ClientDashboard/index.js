@@ -48,7 +48,7 @@ export function ClientDashboard(){
     };   
 
     function scanRequest(){
-        //navigation.navigate('Menu', { restaurant: 'peninha@gmail.com', table: '30' });
+        navigation.navigate('Menu', { restaurant: 'easy@gmail.com', table: '5' });
 
         setScan(true);
         setScanned(false);
@@ -65,9 +65,9 @@ export function ClientDashboard(){
         requestPermission();
     }, []);
 
-    // useFocusEffect(useCallback(() => {
-    //     requestPermission();
-    // }, []));
+    useFocusEffect(useCallback(() => {
+        setScan(false);
+    }, []));
 
     if (hasPermission === null) {
         return <Text>Solicitando permissão da câmera</Text>;
